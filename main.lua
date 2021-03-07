@@ -112,18 +112,3 @@ hooksecurefunc("FriendsFrameTooltip_SetLine",function(line, anchor, text, yOffse
         return
     end
 end);
-
-local f = CreateFrame('FRAME')
-f.texture = f:CreateTexture()
--- do the texture stuff
-f:SetScript('OnEnter', function(self)
-    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-    GameTooltip:AddLine('this is a single line')
-    GameTooltip:AddDoubleLine('left text', 'right text')
-    GameTooltip:AddLine('this is a single line with colour', 1, 0.3, 0.6, 1)
-    GameTooltip:AddDoubleLine('left text with colour', 'right text coloured white',    0.3, 0.8, 0.2, 1,     1, 1, 1, 1) -- the gaps are to demonstrate the rgba args for l+r
-    GameTooltip:Show()
-end)
-f:SetScript('OnLeave', function()
-    GameTooltip_SetDefaultAnchor(GameTooltip, UIParent)
-end)
