@@ -166,8 +166,6 @@ function SetOwnerSafely(object, owner, anchor, offsetX, offsetY)
 end
 
 function OnEnter(self)
-    SetOwnerSafely(tooltip, self, "ANCHOR_TOPLEFT", 0, 0)
-
     local entry = C_LFGList.GetActiveEntryInfo()
 
     if entry then
@@ -183,12 +181,7 @@ function OnEnter(self)
     elseif self.memberIdx then
         local fullNameAvailable, fullName = GetFullName(self, self:GetParent().applicantID, self.memberIdx)
         if fullNameAvailable then
-            print("Set GameTooltip owner")
---            tooltip:AddLine("blergh")
-            tooltip:AddLine(wowrepioString(0)) -- wowrepioString(0))
-            print("GameTooltip added lines")
-            tooltip:Show()
-            print("GameTooltip shown")
+            tooltip:AddLine(wowrepioString(0))
         else
             print("fullName not available: " .. tostring(currentResult))
         end
