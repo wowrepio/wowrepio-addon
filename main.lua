@@ -1,18 +1,26 @@
+local LibQTip = LibStub('LibQTip-1.0')
 local wowrepio = CreateFrame("Frame")
 wowrepio:RegisterEvent("ADDON_LOADED")
-wowrepio:RegisterEvent("PLAYER_LOGIN")
-wowrepio:RegisterEvent("PLAYER_LOGOUT")
-wowrepio:RegisterEvent("PLAYER_ENTERING_WORLD")
 
--- very nice addon from Phanx :) Thanks...
+wowrepio:SetScript("OnEvent", function(self, event, ...)
+    print("OnEvent: " .. event)
+
+    wowrepio:OnLoad()
+end)
+
 local inspectedFriend = {};
+local currentResult = {};
 local CHARACTER_NAME_REGEX = "(.+), (%d+) (.+) (.+)"
 local _FRIENDS_LIST_REALM = FRIENDS_LIST_REALM.."|r(.+)"
 local tooltipLineLocked = false
+local loaded = false
+local tooltip = {};
+
 
 print("========================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================================s");
 
 local function getColorFor(value)
+    print("getColorFor " .. tostring(value))
     local ranges = {
 --        {item quality color id, min inclusive, max exclusive}
         {0, 0.0, 1.0},
@@ -25,10 +33,11 @@ local function getColorFor(value)
         {8, 4.95, 5.01},
     }
 
-    for _, range in ipairs(ranges) do
+    for i, range in ipairs(ranges) do
         local colorCodeId = range[1]
         local scoreMinInclusive = range[2]
         local scoreMaxExclusive = range[3]
+
 
         if value >= scoreMinInclusive and value < scoreMaxExclusive then
             local _, _, _, hex = GetItemQualityColor(colorCodeId)
@@ -45,6 +54,7 @@ local function AddLines(tt,text)
 end
 
 local function wowrepioString(offset)
+    print("Wowrepio string enter")
     if not offset then
         offset = 2
     end
@@ -57,7 +67,9 @@ local function wowrepioString(offset)
         },
         average = 4.5,
     }
-    local text = NORMAL_FONT_COLOR_CODE.."WowRep.io Score " .. getColorFor(score.average) .. tostring(score.average) .. "|r|n"
+
+    local text = NORMAL_FONT_COLOR_CODE .. "WowRep.io Score |r"
+    text = text .. getColorFor(score.average) .. tostring(score.average) .. "|n"
     for k, v in pairs(score.factors) do
         for i=1,offset+1 do
             text = text.." "
@@ -69,8 +81,8 @@ local function wowrepioString(offset)
     return text
 end
 
--- normal on-screen tooltip
-GameTooltip:HookScript("OnTooltipSetUnit", function(self, ...)
+function OnTooltipSetUnit(self, ...)
+    print("OnTooltipSetUnit")
     local name, unit, guid, realm = self:GetUnit();
     if not unit then
         local mf = GetMouseFocus();
@@ -87,7 +99,7 @@ GameTooltip:HookScript("OnTooltipSetUnit", function(self, ...)
             self:AddLine(wowrepioString(2))
         end
     end
-end)
+end
 
 -- Friend list tooltip
 hooksecurefunc("FriendsFrameTooltip_SetLine",function(line, anchor, text, yOffset)
@@ -112,3 +124,123 @@ hooksecurefunc("FriendsFrameTooltip_SetLine",function(line, anchor, text, yOffse
         return
     end
 end);
+
+local hooked = {};
+
+local function HookApplicantButtons(buttons)
+    for _, button in pairs(buttons) do
+        if not hooked[button] then
+            hooked[button] = true
+            button:HookScript("OnEnter", OnEnter)
+            button:HookScript("OnLeave", OnLeave)
+        end
+    end
+end
+
+local function GetFullName(parent, applicantID, memberIdx)
+    local fullName = C_LFGList.GetApplicantMemberInfo(applicantID, memberIdx)
+    if not fullName then
+        return false
+    end
+
+    return true, fullName
+end
+
+function SetOwnerSafely(object, owner, anchor, offsetX, offsetY)
+    if type(object) ~= "table" or type(object.GetOwner) ~= "function" then
+        return
+    end
+    local currentOwner = object:GetOwner()
+    if not currentOwner then
+        object:SetOwner(owner, anchor, offsetX, offsetY)
+        return true
+    end
+    offsetX, offsetY = offsetX or 0, offsetY or 0
+    local currentAnchor, currentOffsetX, currentOffsetY = object:GetAnchorType()
+    currentOffsetX, currentOffsetY = currentOffsetX or 0, currentOffsetY or 0
+    if currentAnchor ~= anchor or (currentOffsetX ~= offsetX and abs(currentOffsetX - offsetX) > 0.01) or (currentOffsetY ~= offsetY and abs(currentOffsetY - offsetY) > 0.01) then
+        object:SetOwner(owner, anchor, offsetX, offsetY)
+        return true
+    end
+    return false, true
+end
+
+function OnEnter(self)
+    SetOwnerSafely(tooltip, self, "ANCHOR_TOPLEFT", 0, 0)
+
+    local entry = C_LFGList.GetActiveEntryInfo()
+
+    if entry then
+        currentResult.activityID = entry.activityID
+    end
+
+    if not currentResult.activityID then
+        return
+    end
+
+    if self.applicantID and self.Members then
+        HookApplicantButtons(self.Members)
+    elseif self.memberIdx then
+        local fullNameAvailable, fullName = GetFullName(self, self:GetParent().applicantID, self.memberIdx)
+        if fullNameAvailable then
+            print("Set GameTooltip owner")
+--            tooltip:AddLine("blergh")
+            tooltip:AddLine(wowrepioString(0)) -- wowrepioString(0))
+            print("GameTooltip added lines")
+            tooltip:Show()
+            print("GameTooltip shown")
+        else
+            print("fullName not available: " .. tostring(currentResult))
+        end
+    end
+end
+
+function OnLeave(self)
+    GameTooltip:Hide()
+    print("Tooltip released and left")
+end
+--
+function wowrepio:OnLoad()
+    print("OnLoad")
+    if loaded then
+        print("OnLoad early returning")
+        return
+    end
+
+    if LibQTip then
+        print("LIBQTip present")
+    else
+        print("LIBQTip not present")
+    end
+
+    tooltip = GameTooltip
+    tooltip:HookScript("OnTooltipSetUnit", OnTooltipSetUnit)
+
+    print("OnLoad after, preparing hooks")
+
+    print("Wowrepio:onLoad")
+
+    -- lfg applicants - BY RAIDER.io
+    for i=1, 14 do
+        print("Hooking button " .. i)
+        local button = _G["LFGListApplicationViewerScrollFrameButton" .. i]
+        button:HookScript("OnEnter", OnEnter)
+        button:HookScript("OnLeave", OnLeave)
+    end
+
+    -- allow lookup by all team members - BY RAIDER.IO
+    do
+        local f = _G.LFGListFrame.ApplicationViewer.UnempoweredCover
+        f:EnableMouse(false)
+        f:EnableMouseWheel(false)
+        f:SetToplevel(false)
+    end
+
+    loaded = true
+end
+
+--function wowrepio:OnEvent(self, event, ...)
+--    print("event: " .. tostring(event))
+--end
+--
+--wowrepio:SetScript("OnEvent", wowrepio:OnEvent)
