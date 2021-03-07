@@ -2,6 +2,8 @@ local ns = select(2, ...) ---@type ns @The addon namespace.
 ns.tooltipLineLocked = false
 ns.loaded = false
 
+RED_FONT_COLOR_CODE = "|cFFFF0000"
+
 -- Module system
 do
     ---@type Module<string, Module>
@@ -227,7 +229,6 @@ do
     end
 
     function util:getColorFor(value)
-        print("getColorFor " .. tostring(value))
         local ranges = {
             --        {item quality color id, min inclusive, max exclusive}
             {0, 0.0, 1.0},
@@ -261,7 +262,6 @@ do
     end
 
     function util:wowrepioString(offset)
-        print("Wowrepio string enter")
         if not offset then
             offset = 2
         end
@@ -282,7 +282,7 @@ do
                 text = text.." "
             end
 
-            text = text .. NORMAL_FONT_COLOR_CODE .. k .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
+            text = text .. NORMAL_FONT_COLOR_CODE .. string.upper(string.sub(k, 1,1)) .. string.sub(k, 2, -1) .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
         end
 
         return text
@@ -307,7 +307,6 @@ do
     end
 
     local function lfgTooltip_OnTooltipSetUnit(self, ...)
-        print("OnTooltipSetUnit")
         local name, unit, guid, realm = self:GetUnit();
         if not unit then
             local mf = GetMouseFocus();
@@ -353,27 +352,20 @@ do
             if fullNameAvailable then
                 GameTooltip:AddLine(util:wowrepioString(0))
             else
-                print("fullName not available: " .. tostring(currentResult))
+                --print("fullName not available: " .. tostring(currentResult))
             end
         end
     end
 
     function lfgTooltip_OnLeave(self)
         GameTooltip:Hide()
-        print("Tooltip released and left")
     end
 
     function lfgTooltip:OnLoad()
-        print("lfgTooltip:OnLoad()")
         GameTooltip:HookScript("OnTooltipSetUnit", lfgTooltip_OnTooltipSetUnit)
-
-        print("OnLoad after, preparing hooks")
-
-        print("Wowrepio:onLoad")
 
         -- lfg applicants - BY wowrep.io
         for i=1, 14 do
-            print("Hooking button " .. i)
             local button = _G["LFGListApplicationViewerScrollFrameButton" .. i]
             button:HookScript("OnEnter", lfgTooltip_OnEnter)
             button:HookScript("OnLeave", lfgTooltip_OnLeave)
@@ -425,9 +417,13 @@ do
     end
 
     function friendTooltip:OnLoad()
-        print("friendTooltip:OnLoad()")
         hooksecurefunc("FriendsFrameTooltip_SetLine", friendTooltip_SetLine)
     end
+end
+
+-- Guild Tooltip
+do
+    local guildTooltip = ns:NewModule("guildTooltip")
 end
 
 -- Wowrepio
@@ -437,6 +433,10 @@ do
     -- Load required modules
     local _ = ns:GetModule("friendTooltip")
     local _ = ns:GetModule("lfgTooltip")
+
+    function wowrepio:OnLoad()
+        print("Thank you for using " .. NORMAL_FONT_COLOR_CODE .. "WowRep.io! " .. RED_FONT_COLOR_CODE .. "<3")
+    end
 end
 
 ns:GetModule("wowrepio") -- Its run time!
