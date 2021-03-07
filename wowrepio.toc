@@ -1,0 +1,31 @@
+## Interface: 90005
+## Title: wowrep.io - Social ranking for World of Warcraft
+## Author: Marahin
+## X-Curse-Project-ID: 456155
+## X-WoWI-ID: 25899
+## Version: 1.0.0
+
+# main.xml
+libs/LibStub/LibStub.lua
+
+# Load data
+db/db.lua
+db/realms.lua
+
+# Load framework
+const.lua
+simple_module_framework.lua
+
+# Load addon
+hash.lua
+utils.lua
+db.lua
+render.lua
+tooltips/game.lua
+tooltips/friend.lua
+tooltips/groster.lua
+tooltips/community.lua
+tooltips/lfg.lua
+dropdown.lua
+
+wowrepio.lua
