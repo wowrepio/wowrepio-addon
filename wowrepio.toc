@@ -1,6 +1,6 @@
-## Interface: 80200
-## Title: wowrepio
+## Interface: 90002
+## Title: wowrep.io - Social ranking for World of Warcraft
 ## Author: Marahin
-## Version: 1
+## Version: 0.01 ()
 
-main.lua
+main.xml
