@@ -1,6 +1,7 @@
 ## Interface: 90002
 ## Title: wowrep.io - Social ranking for World of Warcraft
 ## Author: Marahin
+## X-Curse-Project-ID: 456155
 ## Version: 0.0.1 ()
 
 main.xml
