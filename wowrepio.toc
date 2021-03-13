@@ -5,4 +5,8 @@
 ## X-WoWI-ID: 25899
 ## Version: 0.0.1 ()
 
+@do-not-package@
+tools/
+@end-do-not-package@
+
 main.xml
