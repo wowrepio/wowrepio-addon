@@ -23,7 +23,8 @@ end
 
 FileUtils.cp("./db/_db_template.lua", "./db/db.lua")
 open('./db/db.lua', 'a') { |f|
-  lua_lines.each{ |line| f.puts "\n" + line }
+  f.puts "\n"
+  lua_lines.each{ |line| f.puts line }
 }
 
 `git add .`
