@@ -10,7 +10,7 @@ local ns = select(2, ...) ---@type ns @The addon namespace.
 RED_FONT_COLOR_CODE = "|cFFFF0000"
 REGIONS = {"us", "kr", "eu", "tw", "cn"}
 
-function string:split(delimiter)
+function string:wowrepio_Split(delimiter)
     local result = { }
     local from  = 1
     local delim_from, delim_to = string.find( self, delimiter, from  )
@@ -384,7 +384,7 @@ do
         end
         if type(arg1) == "string" then
             if arg1:find("-", nil, true) then
-                name, realm = ("-"):split(arg1)
+                name, realm = ("-"):wowrepio_Split(arg1)
             else
                 name = arg1 -- assume this is the name
             end
