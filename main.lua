@@ -442,31 +442,75 @@ do
         return false, true, currentOwner == owner
     end
 
-    function util:getColorFor(value)
-        local ranges = {
-            --        {item quality color id, min inclusive, max exclusive}
-            {0, 0.0, 1.0},
-            {1, 1.0, 2.0},
-            {2, 2.0, 2.856},
-            {3, 2.856, 3.57},
-            {4, 3.57, 4.284},
-            {5, 4.284, 4.75},
-            {6, 4.75, 4.95},
-            {8, 4.95, 5.01},
-        }
-
-        for i, range in ipairs(ranges) do
-            local colorCodeId = range[1]
-            local scoreMinInclusive = range[2]
-            local scoreMaxExclusive = range[3]
+    local function colorShade(hexColor, perc)
+        local r = tonumber(hexColor:sub(1,2), 16)
+        local g = tonumber(hexColor:sub(3,4), 16)
+        local b = tonumber(hexColor:sub(5,6), 16)
 
 
-            if value >= scoreMinInclusive and value < scoreMaxExclusive then
-                local _, _, _, hex = GetItemQualityColor(colorCodeId)
+        r = r * (perc/100);
+        g = g * (perc/100);
+        b = b * (perc/100);
 
-                return "|c" .. hex
-            end
+        if r > 255 then
+            r = 255
         end
+
+        if r<0 then
+            r = 0
+        end
+
+        if g > 255 then
+            g = 255
+        end
+        if g<0 then
+            g = 0
+        end
+
+        if b > 255 then
+            b = 255
+        end
+
+        if b<0 then
+            b = 0
+        end
+
+        local rr = string.format("%x", math.floor(r))
+        local gg = string.format("%x", math.floor(g))
+        local bb = string.format("%x", math.floor(b))
+
+        if string.len(rr) == 1 then
+            rr = "0" .. rr
+        end
+
+        if string.len(gg) == 1 then
+            gg = "0" .. gg
+        end
+
+        if string.len(bb) == 1 then
+            bb = "0" .. bb
+        end
+
+        return rr .. gg .. bb
+    end
+
+    function util:getColorFor(value)
+        local perc
+        local colorBase
+        local k
+
+        if value >= 3 then
+            colorBase = "109110"
+            k = value - 3
+            perc = (100+(100-(k*50)))*((5/(k+1)))
+        else
+            colorBase = "911010"
+            k = value
+            perc = (100+((k-1)*50*k/0.9))*(k/1)
+        end
+
+
+        return "|c00" .. colorShade(colorBase, perc)
     end
 
     function util:AddLines(tt,text)
@@ -483,7 +527,7 @@ do
         end
 
         if not score then
-            return text .. "not rated"
+            return text .. "|c007F7F7Fnot rated|r"
         end
 
         text = text .. util:getColorFor(score.average) .. tostring(score.average) .. "|n"
@@ -1206,12 +1250,12 @@ end
 -- wowrepio
 do
     local wowrepio = ns:NewModule("wowrepio")
-
+    local util = ns:GetModule("util")
     local wowrepioFrame = CreateFrame("Frame")
+
     function wowrepio:OnLoad()
         print("Thank you for using " .. NORMAL_FONT_COLOR_CODE .. "WowRep.io! " .. RED_FONT_COLOR_CODE .. "<3")
         print("Shout out to Raider.IO for inspiration and a lot of technical help, this addon is based on their work!")
-
 
         wowrepioFrame:RegisterEvent("CHALLENGE_MODE_START")
         wowrepioFrame:RegisterEvent("CHALLENGE_MODE_COMPLETED")
