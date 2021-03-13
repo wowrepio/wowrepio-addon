@@ -676,6 +676,7 @@ end
 do
     local friendTooltip = ns:NewModule("friendTooltip")
     local util = ns:GetModule("util")
+    local db = ns:GetModule("db")
     local inspectedFriend = {}
     local _FRIENDS_LIST_REALM = FRIENDS_LIST_REALM.."|r(.+)"
     local CHARACTER_NAME_REGEX = "(.+), (%d+) (.+) (.+)"
@@ -701,7 +702,7 @@ do
             inspectedFriend.realmName = realmName
 
             ns.tooltipLineLocked = true
-            FriendsFrameTooltip_SetLine(line, anchor, util:AddLines(text, util:wowrepioString(2)), yOffset)
+            FriendsFrameTooltip_SetLine(line, anchor, util:AddLines(text, util:wowrepioString(2, db:GetScore(util:GetCurrentRegion(), util:GetRealmSlug(inspectedFriend.realmName), inspectedFriend.name))), yOffset)
             ns.tooltipLineLocked = false
             return
         end
