@@ -27,11 +27,11 @@ open('./db/db.lua', 'a') { |f|
   lua_lines.each{ |line| f.puts line }
 }
 
-`git add .`
-`git commit -m'Update db.lua'`
-`git push origin master`
-`git tag #{Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')}`
-`git push origin master`
-`git push --tags`
+system("git add .")
+system("git commit -m'Update db.lua'")
+if system("git push origin master")
+  system("git tag #{Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')}")
+  system("git push --tags")
+end
 
 puts "Done!"
