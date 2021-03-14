@@ -1,14 +1,18 @@
-local ns = select(2, ...) ---@type ns @The addon namespace.
----
---- @TODO
---- Normalizacja realmName dla funkcji getScore
---- Normalizacja realmName dla dropdown
---- Wyswietlanie "unknown" dla braku score
----
+local ns = select(2, ...)
 
+---
+--- Module system and specific modules and this whole
+--- scaffold of an addon has been invented and originates
+--- from Raider.io:
+--- https://github.com/RaiderIO/raiderio-addon
+--- http://raider.io/
+---
+--- Shout out to their team for the awesome work!
+---
+---
 
 RED_FONT_COLOR_CODE = "|cFFFF0000"
-REGIONS = {"us", "kr", "eu", "tw", "cn"}
+REGIONS = {"us", "kr", "eu", "tw", "cn"} -- Currently supporting eu and us (website)
 
 function string:wowrepio_Split(delimiter)
     local result = { }
@@ -35,47 +39,17 @@ do
 
 end
 
-
 -- Module system
 do
-    ---@type Module<string, Module>
     local modules = {}
     local moduleIndex = 0
 
-    ---@class Module
-    -- private properties for internal use only
-    ---@field private id string @Required and unique string to identify the module.
-    ---@field private index number @Automatically assigned a number based on the creation order.
-    ---@field private loaded boolean @Flag indicates if the module is loaded.
-    ---@field private enabled boolean @Flag indicates if the module is enabled.
-    ---@field private dependencies string[] @List over dependencies before we can Load the module.
-    -- private functions that should never be called
-    ---@field private SetLoaded function @Internal function should not be called manually.
-    ---@field private Load function @Internal function should not be called manually.
-    ---@field private SetEnabled function @Internal function should not be called manually.
-    -- protected functions that can be called but should never be overridden
-    ---@field protected IsLoaded function @Internal function, can be called but do not override.
-    ---@field protected IsEnabled function @Internal function, can be called but do not override.
-    ---@field protected Enable function @Internal function, can be called but do not override.
-    ---@field protected Disable function @Internal function, can be called but do not override.
-    ---@field protected SetDependencies function @Internal function, can be called but do not override.
-    ---@field protected HasDependencies function @Internal function, can be called but do not override.
-    ---@field protected GetDependencies function @Internal function, can be called but do not override. Returns a table using the same order as the dependencies table. Returns the modules or nil depending if they are available or not.
-    -- public functions that can be overridden
-    ---@field public CanLoad function @If it returns true the module will be loaded, otherwise postponed for later. Override to define your modules load criteria that have to be met before loading.
-    ---@field public OnLoad function @Once the module loads this function is executed. Use this to setup further logic for your module. The args provided are the module references as described in the dependencies table.
-    ---@field public OnEnable function @This function is executed when the module is set to enabled state. Use this to setup and prepare.
-    ---@field public OnDisable function @This function is executed when the module is set to disabled state. Use this for cleanup purposes.
-
-    ---@type Module
     local module = {}
 
-    ---@return nil
     function module:SetLoaded(state)
         self.loaded = state
     end
 
-    ---@return boolean
     function module:Load()
         if not self:CanLoad() then
             return false
@@ -85,22 +59,18 @@ do
         return true
     end
 
-    ---@return nil
     function module:SetEnabled(state)
         self.enabled = state
     end
 
-    ---@return boolean
     function module:IsLoaded()
         return self.loaded
     end
 
-    ---@return boolean
     function module:IsEnabled()
         return self.enabled
     end
 
-    ---@return boolean
     function module:Enable()
         if self:IsEnabled() then
             return false
@@ -110,7 +80,6 @@ do
         return true
     end
 
-    ---@return boolean
     function module:Disable()
         if not self:IsEnabled() then
             return false
@@ -120,12 +89,10 @@ do
         return true
     end
 
-    ---@return nil
     function module:SetDependencies(dependencies)
         self.dependencies = dependencies
     end
 
-    ---@return boolean
     function module:HasDependencies()
         if type(self.dependencies) == "string" then
             local m = modules[self.dependencies]
@@ -142,7 +109,6 @@ do
         return true
     end
 
-    ---@return Module[]
     function module:GetDependencies()
         local temp = {}
         local index = 0
@@ -159,31 +125,23 @@ do
         return temp
     end
 
-    ---@return boolean
     function module:CanLoad()
         return not self:IsLoaded()
     end
 
-    ---@vararg Module
-    ---@return nil
     function module:OnLoad(...)
         self:Enable()
     end
 
-    ---@return nil
     function module:OnEnable()
     end
 
-    ---@return nil
     function module:OnDisable()
     end
 
-    ---@param id string @Unique module ID reference.
-    ---@param data Module @Optional table with properties to copy into the newly created module.
     function ns:NewModule(id, data)
         assert(type(id) == "string", "wowrep.io Module expects NewModule(id[, data]) where id is a string, data is optional table.")
         assert(not modules[id], "wowrep.io Module expects NewModule(id[, data]) where id is a string, that is unique and not already taken.")
-        ---@type Module
         local m = {}
         for k, v in pairs(module) do
             m[k] = v
@@ -203,13 +161,10 @@ do
         return m
     end
 
-    ---@param a Module
-    ---@param b Module
     local function SortModules(a, b)
         return a.index < b.index
     end
 
-    ---@return Module[]
     function ns:GetModules()
         local ordered = {}
         local index = 0
@@ -221,8 +176,6 @@ do
         return ordered
     end
 
-    ---@param id string @Unique module ID reference.
-    ---@param silent boolean @Ommit to throw if module doesn't exists.
     function ns:GetModule(id, silent)
         assert(type(id) == "string", "wowrep.io Module expects GetModule(id) where id is a string.")
         for _, module in pairs(modules) do
@@ -303,14 +256,10 @@ do
         end
     end
 
-    ---@return boolean @If the unit provided is a unit token this returns true, otherwise false
     function util:IsUnitToken(unit)
         return type(unit) == "string" and UNIT_TOKENS[unit]
     end
 
-    ---@param arg1 string @"unit", "name", or "name-realm"
-    ---@param arg2 string @"realm" or nil
-    ---@return boolean, boolean, boolean @If the args used in the call makes it out to be a proper unit, arg1 is true and only then is arg2 true if unit exists and arg3 is true if unit is a player.
     function util:IsUnit(arg1, arg2)
         if not arg2 and type(arg1) == "string" and arg1:find("-", nil, true) then
             arg2 = true
@@ -319,8 +268,6 @@ do
         return isUnit, isUnit and UnitExists(arg1), isUnit and UnitIsPlayer(arg1)
     end
 
-    ---@param playerLink string @The player link can be any valid clickable chat link for messaging
-    ---@return string, string @Returns the name and realm, or nil for both if invalid
     function util:GetNameRealmFromPlayerLink(playerLink)
         local linkString, linkText = LinkUtil.SplitLink(playerLink)
         local linkType, linkData = ExtractLinkData(linkString)
@@ -339,9 +286,6 @@ do
         end
     end
 
-    ---@param bnetIDAccount number @BNet Account ID
-    ---@param getAllChars boolean @true = table, false = character as varargs
-    ---@return any @Returns either a table with all characters, or the specific character varargs with name, faction and level.
     function util:GetNameRealmForBNetFriend(bnetIDAccount, getAllChars)
         local index = BNGetFriendIndex(bnetIDAccount)
         if not index then
@@ -370,10 +314,6 @@ do
         return collection
     end
 
-
-    ---@param arg1 string @"unit", "name", or "name-realm"
-    ---@param arg2 string @"realm" or nil
-    ---@return string, string, string @name, realm, unit
     function util:GetNameRealm(arg1, arg2)
         local unit, name, realm
         local _, unitExists, unitIsPlayer = util:IsUnit(arg1, arg2)
@@ -383,11 +323,15 @@ do
                 name, realm = UnitName(arg1)
                 realm = realm and realm ~= "" and realm or GetNormalizedRealmName()
             end
+
             return name, realm, unit
         end
         if type(arg1) == "string" then
+
             if arg1:find("-", nil, true) then
-                name, realm = ("-"):wowrepio_Split(arg1)
+                nameTable = arg1:wowrepio_Split("-")
+                name = nameTable[1]
+                realm = nameTable[2]
             else
                 name = arg1 -- assume this is the name
             end
@@ -399,13 +343,10 @@ do
                 end
             end
         end
+
         return name, realm, unit
     end
 
-
-    ---@param object Widget @Any interface widget object that supports the methods GetScript.
-    ---@param handler string @The script handler like OnEnter, OnClick, etc.
-    ---@return boolean|nil @If successfully executed returns true, otherwise false if nothing has been called. nil if the widget had no handler to execute.
     function util:ExecuteWidgetHandler(object, handler, ...)
         if type(object) ~= "table" or type(object.GetScript) ~= "function" then
             return false
@@ -420,12 +361,6 @@ do
         return true
     end
 
-    ---@param object Widget @Any interface widget object that supports the methods GetOwner.
-    ---@param owner Widget @Any interface widget object.
-    ---@param anchor string @`ANCHOR_TOPLEFT`, `ANCHOR_NONE`, `ANCHOR_CURSOR`, etc.
-    ---@param offsetX number @Optional offset X for some of the anchors.
-    ---@param offsetY number @Optional offset Y for some of the anchors.
-    ---@return boolean, boolean, boolean @If owner was set arg1 is true. If owner was updated arg2 is true. Otherwise both will be set to face to indicate we did not update the Owner of the widget. If the owner is set to the preferred owner arg3 is true.
     function util:SetOwnerSafely(object, owner, anchor, offsetX, offsetY)
         if type(object) ~= "table" or type(object.GetOwner) ~= "function" then
             return
@@ -738,7 +673,7 @@ do
 
     ---@param callbackFunc function
     function callback:RegisterEvent(callbackFunc, ...)
-        assert(type(callbackFunc) == "function", "Raider.IO Callback expects RegisterEvent(callback[, ...events])")
+        assert(type(callbackFunc) == "function", "wowrep.io Callback expects RegisterEvent(callback[, ...events])")
         local events = {...}
         for _, event in ipairs(events) do
             if not callbacks[event] then
@@ -752,7 +687,7 @@ do
     ---@param callbackFunc function
     ---@param event string
     function callback:RegisterUnitEvent(callbackFunc, event, ...)
-        assert(type(callbackFunc) == "function" and type(event) == "string", "Raider.IO Callback expects RegisterUnitEvent(callback, event, ...units)")
+        assert(type(callbackFunc) == "function" and type(event) == "string", "wowrep.io Callback expects RegisterUnitEvent(callback, event, ...units)")
         if not callbacks[event] then
             callbacks[event] = {}
         end
@@ -761,7 +696,7 @@ do
     end
 
     function callback:UnregisterEvent(callbackFunc, ...)
-        assert(type(callbackFunc) == "function", "Raider.IO Callback expects UnregisterEvent(callback, ...events)")
+        assert(type(callbackFunc) == "function", "wowrep.io Callback expects UnregisterEvent(callback, ...events)")
         local events = {...}
         callbackOnce[callbackFunc] = nil
         for _, event in ipairs(events) do
@@ -780,7 +715,7 @@ do
 
     ---@param callbackFunc function
     function callback:UnregisterCallback(callbackFunc)
-        assert(type(callbackFunc) == "function", "Raider.IO Callback expects UnregisterCallback(callback)")
+        assert(type(callbackFunc) == "function", "wowrep.io Callback expects UnregisterCallback(callback)")
         for event, _ in pairs(callbacks) do
             self:UnregisterEvent(callbackFunc, event)
         end
@@ -788,7 +723,7 @@ do
 
     ---@param event string
     function callback:SendEvent(event, ...)
-        assert(type(event) == "string", "Raider.IO Callback expects SendEvent(event[, ...args])")
+        assert(type(event) == "string", "wowrep.io Callback expects SendEvent(event[, ...args])")
         local eventCallbacks = callbacks[event]
         if not eventCallbacks then
             return
@@ -816,18 +751,18 @@ do
 
     ---@param callbackFunc function
     function callback:RegisterEventOnce(callbackFunc, ...)
-        assert(type(callbackFunc) == "function", "Raider.IO Callback expects RegisterEventOnce(callback[, ...events])")
+        assert(type(callbackFunc) == "function", "wowrep.io Callback expects RegisterEventOnce(callback[, ...events])")
         callbackOnce[callbackFunc] = true
         callback:RegisterEvent(callbackFunc, ...)
     end
 
 end
 
--- loader.lua (internal)
--- dependencies: module, callback, config, util, provider
+
+-- Loader module
 do
 
-    local callback = ns:GetModule("Callback") ---@type CallbackModule
+    local callback = ns:GetModule("Callback")
 
     local loadingAgainSoon
     local LoadModules
@@ -1151,6 +1086,7 @@ do
                 name, realm = util:GetNameRealm(fullName)
                 level = charLevel
             end
+
             -- if it's a bnet friend we assume if eligible the name and realm is set, otherwise we assume it's not eligible for a url
             return name, realm, level
         end
@@ -1254,11 +1190,10 @@ end
 -- wowrepio
 do
     local wowrepio = ns:NewModule("wowrepio")
-    local util = ns:GetModule("util")
     local wowrepioFrame = CreateFrame("Frame")
 
     function wowrepio:OnLoad()
-        print("Thank you for using " .. NORMAL_FONT_COLOR_CODE .. "WowRep.io! " .. RED_FONT_COLOR_CODE .. "<3")
+        print("Thank you for using " .. NORMAL_FONT_COLOR_CODE .. "wowrep.io! " .. RED_FONT_COLOR_CODE .. "<3")
         print("Shout out to Raider.IO for inspiration and a lot of technical help, this addon is based on their work!")
 
         wowrepioFrame:RegisterEvent("CHALLENGE_MODE_START")
