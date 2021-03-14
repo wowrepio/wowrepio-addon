@@ -239,6 +239,9 @@ do
     local db = ns:NewModule("db")
 
     function db:GetScore(region, realm, name)
+        if not region or not realm or not name then
+            return null
+        end
         --print("Getting score for " .. region .. "/" .. realm .. "/" .. name)
         return ns.DATABASE[region .. "/" .. realm .. "/" .. name]
     end
