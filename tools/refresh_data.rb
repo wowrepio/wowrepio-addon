@@ -27,6 +27,13 @@ open('./db/db.lua', 'a') { |f|
   lua_lines.each{ |line| f.puts line }
 }
 
+out = `git status`
+if out.include?("nothing to commit")
+  puts "No changes; done!"
+
+  return
+end
+
 system("git add .")
 system("git commit -m'Update db.lua'")
 if system("git push origin master")
