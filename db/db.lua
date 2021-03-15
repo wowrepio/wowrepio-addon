@@ -26,7 +26,7 @@ ns.DATABASE[162297781] = { average = 5.00, factors = { skill = 5.00, teamplay = 
 ns.DATABASE[781387548] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[256267950] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[512227456] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
-ns.DATABASE[194976530] = { average = 2.92, factors = { skill = 4.75, teamplay = 2.00, communication = 2.00 } }
+ns.DATABASE[194976530] = { average = 4.93, factors = { skill = 4.80, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[254576832] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[827339371] = { average = 1.00, factors = { skill = 1.00, teamplay = 1.00, communication = 1.00 } }
 ns.DATABASE[972233454] = { average = 1.33, factors = { skill = 2.00, teamplay = 1.00, communication = 1.00 } }
