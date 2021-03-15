@@ -20,3 +20,4 @@ ns.DATABASE["eu/burning-legion/Nekosa"] = { average = 4.33, factors = { skill = 
 ns.DATABASE["eu/burning-legion/Kaeri"] = { average = 4.33, factors = { skill = 5.00, teamplay = 5.00, communication = 3.00 } }
 ns.DATABASE["eu/burning-legion/Toonik"] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE["eu/draenor/Ahanna"] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
+ns.DATABASE["eu/stormscale/Freddee"] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
