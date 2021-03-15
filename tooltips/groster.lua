@@ -15,7 +15,7 @@ local function OnEnter(self)
     end
     local ownerSet, ownerExisted, ownerSetSame = util:ClaimOwnership(GameTooltip, self)
 
-    local name, realm = util:GetNameRealm(fullName)
+    local name, realm, _ = util:GetNameRealm(fullName)
     if not realm then
         name = fullName
         realm = GetRealmName()

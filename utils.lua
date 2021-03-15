@@ -209,7 +209,7 @@ function util:GetNameRealmFromPlayerLink(playerLink)
         end
         if bnetIDAccount then
             local fullName, _  = util:GetNameRealmForBNetFriend(bnetIDAccount)
-            local name, realm = util:GetNameRealm(fullName)
+            local name, realm, _ = util:GetNameRealm(fullName)
             return name, realm
         end
     end

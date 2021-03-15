@@ -44,7 +44,7 @@ local function GetNameRealmForDropDown(bdropdown)
 
     if not name and UnitExists(unit) then
         if UnitIsPlayer(unit) then
-            name, realm = util:GetNameRealm(unit)
+            name, realm, _  = util:GetNameRealm(unit)
         end
 
         return name, realm
@@ -53,7 +53,7 @@ local function GetNameRealmForDropDown(bdropdown)
     if not name and bnetIDAccount then
         local fullName, _, _ = util:GetNameRealmForBNetFriend(bnetIDAccount)
         if fullName then
-            name, realm = util:GetNameRealm(fullName)
+            name, realm, _ = util:GetNameRealm(fullName)
         end
 
         return name, realm
