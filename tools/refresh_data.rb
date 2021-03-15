@@ -49,11 +49,11 @@ if out.include?("nothing to commit")
   return
 end
 
-# system("git add .")
-# system("git commit -m'Update db.lua'")
-# if system("git push origin master")
-#   system("git tag #{Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')}")
-#   system("git push --tags")
-# end
+system("git add .")
+system("git commit -m'Update db.lua'")
+if system("git push origin master")
+  system("git tag #{Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')}")
+  system("git push --tags")
+end
 
 puts "Done!"

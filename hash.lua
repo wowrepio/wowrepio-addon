@@ -14,15 +14,9 @@ function hash:ify(str)
         local c = str:sub(i,i)
         local cv = string.byte(c)
 
-        print("cv: " .. cv)
-
         v = (v + (cv - string.byte('a') + 1) * pp) % M
         pp = (pp * P) % M
     end
 
     return v
-end
-
-function hash:OnReady()
-    print(hash:ify("Jasiek"))
 end
