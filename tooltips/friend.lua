@@ -29,7 +29,8 @@ local function friendTooltip_SetLine(line, anchor, text, yOffset)
         inspectedFriend.realmName = realmName
 
         ns.tooltipLineLocked = true
-        FriendsFrameTooltip_SetLine(line, anchor, util:AddLines(text, util:wowrepioString(2, db:GetScore(util:GetCurrentRegion(), util:GetRealmSlug(inspectedFriend.realmName), inspectedFriend.name))), yOffset)
+        local wowrepioText = util:wowrepioString(2, db:GetScore(util:GetCurrentRegion(), util:GetRealmSlug(inspectedFriend.realmName), inspectedFriend.name), text)
+        FriendsFrameTooltip_SetLine(line, anchor, util:AddLines(text, wowrepioText, yOffset), yOffset)
         ns.tooltipLineLocked = false
         return
     end

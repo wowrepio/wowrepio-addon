@@ -9,6 +9,6 @@ function render:Score(tooltip, score)
         return
     end
 
-    tooltip:AddLine(util:wowrepioString(0, score))
+    tooltip:AddLine(util:wowrepioString(0, score, IsModifierKeyDown()))
     tooltip:Show() -- Ensure tooltip is properly resized
 end

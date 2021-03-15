@@ -268,7 +268,7 @@ function util:AddLines(tt,text)
     return tt;
 end
 
-function util:wowrepioString(offset, score)
+function util:wowrepioString(offset, score, beLong)
     local text = NORMAL_FONT_COLOR_CODE .. "WowRep.io Score |r"
 
     if not offset then
@@ -280,12 +280,14 @@ function util:wowrepioString(offset, score)
     end
 
     text = text .. util:getColorFor(score.average) .. tostring(score.average) .. "|n"
-    for k, v in pairs(score.factors) do
-        for i=1,offset+1 do
-            text = text.." "
-        end
+    if beLong then
+        for k, v in pairs(score.factors) do
+            for i=1,offset+1 do
+                text = text.." "
+            end
 
-        text = text .. NORMAL_FONT_COLOR_CODE .. string.upper(string.sub(k, 1,1)) .. string.sub(k, 2, -1) .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
+            text = text .. NORMAL_FONT_COLOR_CODE .. string.upper(string.sub(k, 1,1)) .. string.sub(k, 2, -1) .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
+        end
     end
 
     return text
