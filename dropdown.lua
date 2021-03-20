@@ -5,11 +5,11 @@ local util = ns:GetModule("util")
 
 local copyUrlPopup = {
     id = "WOWREPIO_COPY_URL",
-    text = "%s",
+    text = "Use this URL to review %s",
     button2 = CLOSE,
     hasEditBox = true,
     hasWideEditBox = true,
-    editBoxWidth = 350,
+    editBoxWidth = 500,
     preferredIndex = 3,
     timeout = 0,
     whileDead = true,
@@ -33,44 +33,54 @@ local copyUrlPopup = {
     OnCancel = nil
 }
 
-local function GetNameRealmForDropDown(bdropdown)
-    local unit = bdropdown.unit
-    local bnetIDAccount = bdropdown.bnetIDAccount
-    local menuList = bdropdown.menuList
-    local quickJoinMember = bdropdown.quickJoinMember
-    local quickJoinButton = bdropdown.quickJoinButton
-    local tempName, tempRealm = bdropdown.name, bdropdown.server
+local function HandleBnet(dd)
+    local name, realm
+    local fullName, _, _ = util:GetNameRealmForBNetFriend(dd.bnetIDAccount)
+    if fullName then
+        name, realm, _ = util:GetNameRealm(fullName)
+    end
+
+    return name, realm
+end
+
+local function HandleLfgDropdown(dd)
+    local name, realm
+    for i = 1, #dd.menuList do
+        local whisperButton = dd.menuList[i]
+        if whisperButton and (whisperButton.text == _G.WHISPER_LEADER or whisperButton.text == _G.WHISPER) then
+            name, realm = util:GetNameRealm(whisperButton.arg1)
+            break
+        end
+    end
+
+    return name, realm
+end
+
+local function GetNameRealmForDropdown(dd)
+    local tempName, tempRealm = dd.name, dd.server
     local name, realm
 
-    if not name and UnitExists(unit) then
-        if UnitIsPlayer(unit) then
-            name, realm, _  = util:GetNameRealm(unit)
+    if UnitExists(dd.unit) then
+        if UnitIsPlayer(dd.unit) then
+            name, realm, _  = util:GetNameRealm(dd.unit)
         end
 
         return name, realm
     end
 
-    if not name and bnetIDAccount then
-        local fullName, _, _ = util:GetNameRealmForBNetFriend(bnetIDAccount)
-        if fullName then
-            name, realm, _ = util:GetNameRealm(fullName)
-        end
-
-        return name, realm
+    -- BattleNet
+    if not name and dd.bnetIDAccount then
+        return HandleBnet(dd)
     end
 
-    if not name and menuList then
-        for i = 1, #menuList do
-            local whisperButton = menuList[i]
-            if whisperButton and (whisperButton.text == _G.WHISPER_LEADER or whisperButton.text == _G.WHISPER) then
-                name, realm = util:GetNameRealm(whisperButton.arg1)
-                break
-            end
-        end
+    -- LFG
+    if not name and dd.menuList then
+        return HandleLfgDropdown
     end
 
-    if not name and (quickJoinMember or quickJoinButton) then
-        local memberInfo = quickJoinMember or quickJoinButton.Members[1]
+    -- Quick join panel
+    if not name and (dd.quickJoinMember or dd.quickJoinButton) then
+        local memberInfo = dd.quickJoinMember or dd.quickJoinButton.Members[1]
         if memberInfo.playerLink then
             name, realm = util:GetNameRealmFromPlayerLink(memberInfo.playerLink)
         end
@@ -120,7 +130,7 @@ local function OnToggle(dd, event, options)
             return
         end
 
-        selectedName, selectedRealm = GetNameRealmForDropDown(dd)
+        selectedName, selectedRealm = GetNameRealmForDropdown(dd)
         if not selectedName then
             return
         end
@@ -151,7 +161,7 @@ function dropdown:OnReady()
         {
             text = "Copy WowRep.io URL",
             func = function()
-                local url = format("https://wowrep.io/characters/%s/%s/%s?utm_source=addon", util:GetCurrentRegion(), util:GetRealmSlug(selectedRealm), selectedName)
+                local url = util:WowrepioLink(util:GetCurrentRegion(), util:GetRealmSlug(selectedRealm), selectedName)
                 StaticPopup_Show(copyUrlPopup.id, format("%s (%s)", selectedName, selectedRealm), url)
             end
         }

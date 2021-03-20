@@ -16,6 +16,20 @@ end
 local util = ns:AddModule("util")
 local realms = ns.REALMS;
 
+function util:WowrepioLink(region, realm, name)
+    assert(region and realm and name, "util:WowrepioLink needs region, realm and name to be provided")
+
+    return format("https://wowrep.io/characters/%s/%s/%s", region, realm, name)
+end
+
+function util:IsInPartyGroup()
+    return GetNumGroupMembers(LE_PARTY_CATEGORY_HOME) > 0
+end
+
+function util:IsInInstanceGroup()
+    return GetNumGroupMembers(LE_PARTY_CATEGORY_INSTANCE) > 0
+end
+
 function util:GetCurrentRegion()
     local regionId = GetCurrentRegion()
 
@@ -96,7 +110,6 @@ function util:GetNameRealm(arg1, arg2)
 
     return name, realm, unit
 end
-
 
 function util:ExecuteWidgetHandler(object, handler, ...)
     if type(object) ~= "table" or type(object.GetScript) ~= "function" then
@@ -206,7 +219,7 @@ function util:GetNameRealmFromPlayerLink(playerLink)
             bnetIDAccount = tonumber(bnetIDAccount)
         end
         if bnetIDAccount then
-            local fullName, _  = util:GetNameRealmForBNetFriend(bnetIDAccount)
+            local fullName, _  = util:GetNameRealmForBnetFriend(bnetIDAccount)
             local name, realm, _ = util:GetNameRealm(fullName)
             return name, realm
         end
@@ -232,32 +245,21 @@ function util:getColorFor(value)
     return "|c00" .. colorShade(colorBase, perc)
 end
 
-function util:GetNameRealmForBNetFriend(bnetIDAccount, getAllChars)
+function util:GetNameRealmForBnetFriend(bnetIDAccount)
     local index = BNGetFriendIndex(bnetIDAccount)
     if not index then
         return
     end
-    local collection = {}
-    local collectionIndex = 0
+
     for i = 1, C_BattleNet.GetFriendNumGameAccounts(index), 1 do
-        local accountInfo = C_BattleNet.GetFriendGameAccountInfo(index, i)
-        if accountInfo and accountInfo.clientProgram == BNET_CLIENT_WOW and (not accountInfo.wowProjectID or accountInfo.wowProjectID ~= WOW_PROJECT_CLASSIC) then
-            if accountInfo.realmName then
-                accountInfo.characterName = accountInfo.characterName .. "-" .. accountInfo.realmName:gsub("%s+", "")
+        local info = C_BattleNet.GetFriendGameAccountInfo(index, i)
+        if info and info.clientProgram == BNET_CLIENT_WOW and (not info.wowProjectID or info.wowProjectID ~= WOW_PROJECT_CLASSIC) then
+            if info.realmName then
+                info.characterName = info.characterName .. "-" .. info.realmName:gsub("%s+", "")
             end
-            collectionIndex = collectionIndex + 1
-            collection[collectionIndex] = {accountInfo.characterName, ns.FACTION_TO_ID[accountInfo.factionName]}
+            return info.characterName
         end
     end
-    if not getAllChars then
-        for i = 1, collectionIndex do
-            local profile = collection[collectionIndex]
-            local name, faction = profile[1], profile[2]
-            return name, faction
-        end
-        return
-    end
-    return collection
 end
 
 function util:AddLines(tt,text)

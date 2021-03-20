@@ -25,6 +25,14 @@ function lfgTooltip:GetFullName(parent, applicantID, memberIdx)
     return true, fullName
 end
 
+local function lfgTooltip_GroupEntry(tooltip, resultID)
+    local entry = C_LFGList.GetSearchResultInfo(resultID)
+    local name, realm = util:GetNameRealm(entry.leaderName)
+
+    render:Score(tooltip, db:GetScore(ns.REGIONS[GetCurrentRegion()], util:GetRealmSlug(realm), name))
+end
+
+
 function lfgTooltip_OnEnter(self)
     local entry = C_LFGList.GetActiveEntryInfo()
 
@@ -48,6 +56,7 @@ function lfgTooltip_OnLeave(self)
 end
 
 function lfgTooltip:OnReady()
+    -- Leader or team member looking at applicants
     for i=1, 14 do
         local button = _G["LFGListApplicationViewerScrollFrameButton" .. i]
         button:HookScript("OnEnter", lfgTooltip_OnEnter)
@@ -59,5 +68,12 @@ function lfgTooltip:OnReady()
         f:EnableMouse(false)
         f:EnableMouseWheel(false)
         f:SetToplevel(false)
+    end
+
+    -- Applicant browsing groups
+    hooksecurefunc("LFGListUtil_SetSearchEntryTooltip", lfgTooltip_GroupEntry)
+    for i = 1, 10 do
+        local button = _G["LFGListSearchPanelScrollFrameButton" .. i]
+        button:HookScript("OnLeave", lfgTooltip_OnLeave)
     end
 end
