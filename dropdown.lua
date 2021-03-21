@@ -75,7 +75,7 @@ local function GetNameRealmForDropdown(dd)
 
     -- LFG
     if not name and dd.menuList then
-        return HandleLfgDropdown
+        return HandleLfgDropdown(dd)
     end
 
     -- Quick join panel
