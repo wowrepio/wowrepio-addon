@@ -4,6 +4,7 @@ ns.DATABASE = {}
 
 -- HERE ARE DRAGONS --
 ns.DATABASE[421802036] = { average = 4.00, factors = { skill = 3.80, teamplay = 4.10, communication = 4.10 } }
+ns.DATABASE[370111215] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[9563935] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[752102401] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[373951844] = { average = 4.67, factors = { skill = 4.50, teamplay = 5.00, communication = 4.50 } }
@@ -147,3 +148,12 @@ ns.DATABASE[314179498] = { average = 5.00, factors = { skill = 5.00, teamplay = 
 ns.DATABASE[885147962] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[808748214] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[656338765] = { average = 1.00, factors = { skill = 1.00, teamplay = 1.00, communication = 1.00 } }
+ns.DATABASE[611162750] = { average = 4.67, factors = { skill = 5.00, teamplay = 4.00, communication = 5.00 } }
+ns.DATABASE[379481534] = { average = 3.67, factors = { skill = 4.00, teamplay = 4.00, communication = 3.00 } }
+ns.DATABASE[568478454] = { average = 3.67, factors = { skill = 4.00, teamplay = 3.00, communication = 4.00 } }
+ns.DATABASE[943436169] = { average = 3.00, factors = { skill = 3.00, teamplay = 3.00, communication = 3.00 } }
+ns.DATABASE[503796896] = { average = 4.33, factors = { skill = 3.00, teamplay = 5.00, communication = 5.00 } }
+ns.DATABASE[472077467] = { average = 1.00, factors = { skill = 1.00, teamplay = 1.00, communication = 1.00 } }
+ns.DATABASE[629262966] = { average = 1.00, factors = { skill = 1.00, teamplay = 1.00, communication = 1.00 } }
+ns.DATABASE[430084284] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
+ns.DATABASE[707907092] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
