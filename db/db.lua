@@ -196,3 +196,4 @@ ns.DATABASE[153310038] = { average = 2.67, factors = { skill = 4.00, teamplay = 
 ns.DATABASE[537421309] = { average = 4.00, factors = { skill = 4.00, teamplay = 4.00, communication = 4.00 } }
 ns.DATABASE[504159192] = { average = 4.67, factors = { skill = 4.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[300722750] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
+ns.DATABASE[623267730] = { average = 4.33, factors = { skill = 4.00, teamplay = 4.00, communication = 5.00 } }
