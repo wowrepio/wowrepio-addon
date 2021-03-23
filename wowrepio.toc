@@ -3,7 +3,7 @@
 ## Author: Marahin
 ## X-Curse-Project-ID: 456155
 ## X-WoWI-ID: 25899
-## Version: 1.0.0
+## Version: 2.0
 ## SavedVariablesPerCharacter: wowrepioConfig
 
 libs/LibStub/LibStub.lua
@@ -15,7 +15,7 @@ db/realms.lua
 
 # Load framework
 const.lua
-simple_module_framework.lua
+smf.lua
 channel.lua
 
 # Load addon
@@ -23,16 +23,14 @@ hash.lua
 utils.lua
 db.lua
 render.lua
-
+payload.lua
 config.lua
-
 tooltips/game.lua
 tooltips/friend.lua
 tooltips/groster.lua
 tooltips/community.lua
 tooltips/lfg.lua
-
 dropdown.lua
 chat.lua
-
+partyTracker.lua
 wowrepio.lua

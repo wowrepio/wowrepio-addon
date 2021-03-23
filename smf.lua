@@ -63,6 +63,11 @@ local function InitializeAddon()
             module:Initialize()
         end)
     end
+
+    local channel = ns:GetModule("channel")
+    channel:RegisterEvent("PLAYER_ENTERING_WORLD", function() 
+        channel:SendEvent("WOWREPIO_READY")
+    end)
 end
 
 local smfModuleFrame = CreateFrame("Frame")

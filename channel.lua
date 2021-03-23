@@ -18,7 +18,7 @@ function channel:RegisterEvent(event, handler)
         eventHandlers[event] = {}
     end
 
-    channelFrame:RegisterEvent(event, handler)
+    pcall(function() channelFrame:RegisterEvent(event, handler) end) -- Do not raise when its a custom event, that the game does not know
 
     table.insert(eventHandlers[event], handler)
 end
@@ -30,7 +30,7 @@ function channel:RegisterSingleEvent(event, handler)
         singleEventHandlers[event] = {}
     end
 
-    channelFrame:RegisterEvent(event, handler)
+    pcall(function() channelFrame:RegisterEvent(event, handler) end) -- Do not raise when its a custom event, that the game does not know
 
     table.insert(singleEventHandlers[event], handler)
 end
@@ -40,13 +40,13 @@ function channel:HandleEvent(event, ...)
 
     if eventHandlers[event] then
         for _, eventHandler in pairs(eventHandlers[event]) do
-            eventHandler()
+            eventHandler(...)
         end
     end
 
     if singleEventHandlers[event] then
         for _, eventHandler in pairs(singleEventHandlers[event]) do
-            eventHandler()
+            eventHandler(...)
         end
 
         singleEventHandlers[event] = nil
