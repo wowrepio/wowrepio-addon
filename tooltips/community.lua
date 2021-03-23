@@ -8,7 +8,7 @@ local render = ns:GetModule("render")
 local hooked = {}
 
 local function CanGetIdentifierFor(arg1, arg2)
-    return not ((arg1.clubType and arg1.clubType ~= Enum.ClubType.Guild and arg1.clubType ~= Enum.ClubType.Character) or not arg2)
+    return not ((arg1 and arg1.clubType and arg1.clubType ~= Enum.ClubType.Guild and arg1.clubType ~= Enum.ClubType.Character) or not arg2)
 end
 
 local function OnEnter(self)
