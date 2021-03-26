@@ -292,5 +292,8 @@ ns.DATABASE[610940357] = { average = 5.00, factors = { skill = 5.00, teamplay = 
 ns.DATABASE[21598474] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[951179179] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[752837344] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
+ns.DATABASE[504097503] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[241551846] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
 ns.DATABASE[378630008] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
+ns.DATABASE[14407652] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
+ns.DATABASE[83365916] = { average = 5.00, factors = { skill = 5.00, teamplay = 5.00, communication = 5.00 } }
