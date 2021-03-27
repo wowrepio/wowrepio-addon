@@ -23,14 +23,13 @@ hash.lua
 utils.lua
 db.lua
 render.lua
-payload.lua
-config.lua
 tooltips/game.lua
 tooltips/friend.lua
 tooltips/groster.lua
 tooltips/community.lua
 tooltips/lfg.lua
-dropdown.lua
 chat.lua
 partyTracker.lua
+payload.lua
+config.lua
 wowrepio.lua

@@ -1,6 +1,7 @@
 local addonName, ns = ...
 
 local config = ns:AddModule("config")
+local payload = ns:GetModule("payload")
 local frame
 
 local defaultConfig = {
@@ -10,9 +11,14 @@ local defaultConfig = {
 SLASH_WOWREPIO1 = "/wowrepio"
 SLASH_WOWREPIO2 = "/wowrep"
 SLASH_WOWREPIO3 = "/repio"
-SlashCmdList["WOWREPIO"] = function(_msg)
-    for i=1,3 do -- One very smart lady told me that its buggy and it indeed is buggy, this is why we call it a few times!
-        config:OpenConfig()
+SlashCmdList["WOWREPIO"] = function(msg)
+    print("msg: " .. msg)
+    if msg == "payload" then
+        payload:Show()
+    else
+        for i=1,3 do -- One very smart lady told me that its buggy and it indeed is buggy, this is why we call it a few times!
+            config:OpenConfig()
+        end
     end
 end
 
