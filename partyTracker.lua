@@ -7,14 +7,14 @@ local util = ns:GetModule("util")
 local lastTick
 local partyStack = {} -- { name = { name=..., joined=..., lastSeenAt=... }}
 
-local GRACE_PERIOD = 10 * 60
+local GRACE_PERIOD = 1
 
 local function OnCharacterJoined(name, data)
-    print("Character " .. name .. " (genderId: " .. data.genderId .. ", classId: " .. data.classId ..", raceId: " .. data.raceId .. ") joined party at " .. data.joined)
+    -- print("Character " .. name .. " (genderId: " .. data.genderId .. ", classId: " .. data.classId ..", raceId: " .. data.raceId .. ") joined party at " .. data.joined)
 end
 
 local function OnCharacterLeft(name, data)
-    print("Character " .. name .. " (genderId: " .. data.genderId .. ", classId: " .. data.classId ..", raceId: " .. data.raceId .. ") left party at " .. lastTick .. ", and was in the party for " .. lastTick - data.joined .. "s")
+    -- print("Character " .. name .. " (genderId: " .. data.genderId .. ", classId: " .. data.classId ..", raceId: " .. data.raceId .. ") left party at " .. lastTick .. ", and was in the party for " .. lastTick - data.joined .. "s")
 end
 
 local function updateParty()
@@ -31,12 +31,12 @@ local function updateParty()
     -- Ensure existence of partyStack entity
     for i=1, GetNumGroupMembers() do
         local fullName, realm, unitExists = util:GetNameRealm(prefix .. i)
-        print("fullName: " .. fullName)
+        -- print("fullName: " .. fullName)
         if fullName ~= "Unknown" and fullName ~= prefix .. i and unitExists then -- If the user identifier cannot be fetched then we just omit (usually it happens when its us in the party)
             local entryKey = util:GetCurrentRegion() .. "/" .. util:GetRealmSlug(realm) .. "/" .. fullName
 
             if partyStack[entryKey] ~= nil then -- Party member exists
-                print("Member existed: " .. entryKey)
+                -- print("Member existed: " .. entryKey)
                 partyStack[entryKey].lastSeenAt = lastTick
 
                 if partyStack[entryKey].emittedLeftEvent then -- Character rejoined party
@@ -46,7 +46,7 @@ local function updateParty()
                     channel:SendEvent("WOWREPIO_PARTYSTACK_CHARACTER_JOINED", entryKey, partyStack[entryKey])
                 end
             else
-                print("Character new: " .. entryKey)
+                -- print("Character new: " .. entryKey)
 
                 local _, _, raceId = UnitRace(fullName)
                 local _, _, classId = UnitClass(fullName)
@@ -84,7 +84,14 @@ end
 function partyTracker:GetData()
     updateParty()
 
-    return partyStack
+    local d = {}
+    for k, v in pairs(partyStack) do
+        if lastTick - v.joined >= GRACE_PERIOD then
+            d[k] = v
+        end
+    end
+
+    return d
 end
 
 function partyTracker:OnReady()

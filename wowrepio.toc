@@ -7,7 +7,9 @@
 ## SavedVariablesPerCharacter: wowrepioConfig
 
 libs/LibStub/LibStub.lua
-libs/LibDropDownExtension-1.0/LibDropDownExtension-1.0.lua
+libs/CallbackHandler-1.0/CallbackHandler-1.0.lua
+libs/LibDataBroker-1.1/LibDataBroker-1.1.lua
+libs/LibDBIcon-1.0/LibDBIcon-1.0.lua
 
 # Load data
 db/db.lua
@@ -28,8 +30,9 @@ tooltips/friend.lua
 tooltips/groster.lua
 tooltips/community.lua
 tooltips/lfg.lua
-chat.lua
 partyTracker.lua
 payload.lua
 config.lua
+chat.lua
+popup.lua
 wowrepio.lua

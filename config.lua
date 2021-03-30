@@ -1,18 +1,22 @@
 local addonName, ns = ...
 
+local ldb = LibStub("LibDataBroker-1.1")
+local icon = LibStub("LibDBIcon-1.0")
 local config = ns:AddModule("config")
 local payload = ns:GetModule("payload")
 local frame
 
 local defaultConfig = {
     emitMessageAfterDungeon = false,
+
+    MinimapButtonSettings = { hide = false },
 }
 
 SLASH_WOWREPIO1 = "/wowrepio"
 SLASH_WOWREPIO2 = "/wowrep"
 SLASH_WOWREPIO3 = "/repio"
 SlashCmdList["WOWREPIO"] = function(msg)
-    print("msg: " .. msg)
+    -- print("msg: " .. msg)
     if msg == "payload" then
         payload:Show()
     else
@@ -25,6 +29,10 @@ end
 local function Setup()
     if not wowrepioConfig then
         wowrepioConfig = defaultConfig
+    end
+
+    if not wowrepioConfig.MinimapButtonSettings then
+        wowrepioConfig.MinimapButtonSettings = { hide = false }
     end
 
     frame = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
@@ -46,9 +54,21 @@ local function Setup()
             PlaySound(857)
         end
     end)
-    frame.printOutAfterFinishedDungeon.tooltipRequirement = "wowrep.io will print out a message asking team mates to rate you after finished dungeon"
+    frame.printOutAfterFinishedDungeon.tooltipRequirement = "wowrep.io will print out a message after finished dungeon"
     frame.printOutAfterFinishedDungeon:SetChecked(wowrepioConfig.emitMessageAfterDungeon)
     frame.printOutAfterFinishedDungeon:SetPoint("TOPLEFT", frame.title, "BOTTOMLEFT", -2, -16)
+
+    local ldbData = ldb:NewDataObject("wowrepio", {
+        type="data source",
+        text="wowrepio",
+        icon = "Interface\\AddOns\\wowrepio\\wowrepio_Icon",
+        OnClick = function() payload:Show() end,
+        OnTooltipShow = function(tt) 
+            tt:AddLine("wowrep.io")
+        end,
+    })
+
+    icon:Register("wowrepio", ldbData, wowrepioConfig.MinimapButtonSettings)
 
     InterfaceOptions_AddCategory(frame)
 end

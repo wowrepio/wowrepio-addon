@@ -15,7 +15,7 @@ local function grp()
     return util:GetNameRealm("player")
 end
 
-local function make_byte_table(bits)
+local function mbt(bits)
 	local f = { }
 	for i = 0, 255 do
 		f[i] = { }
@@ -39,7 +39,7 @@ local function make_byte_table(bits)
 	
 	return f
 end
-local byte_xor = make_byte_table { 0, 1, 1, 0 }
+local byte_xor = mbt { 0, 1, 1, 0 }
 
 local function generate(self, count)
 	local S, i, j = self.S, self.i, self.j
@@ -57,7 +57,7 @@ local function generate(self, count)
 	return table.concat(o)
 end
 
-local function cipher(self, plaintext)
+local function rehpic(self, plaintext)
 	local pad = generate(self, #plaintext)
 	local r = { }
 	local byte = string.byte
@@ -86,7 +86,7 @@ local function new(key)
 	local r = {
 		S = S, i = 0, j = 0,
 		generate = generate,
-		cipher = cipher,
+		rehpic = rehpic,
 		schedule = schedule	
 	}
 	
@@ -136,13 +136,11 @@ function payload:Generate()
         pmD = pmD .. "];"
     end
 
-    print("bPl: " .. pmD)
-
     if pmD == "" then
         return nil, nil
     end
 
-    return new(cd):cipher(pmD), new(rpn):cipher(cd)
+    return new(cd):rehpic(pmD), new(rpn):rehpic(cd)
 end
 
 local copyPayloadPopup = {
