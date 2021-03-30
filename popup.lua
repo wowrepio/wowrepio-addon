@@ -11,7 +11,7 @@ StaticPopupDialogs["WOWREPIO_WANNA_REVIEW_POPUP"] = {
     button1 = "Yes",
     button2 = "No",
     OnAccept = function()
-       payload:ShowDialog()
+       payload:Show()
     end,
     sound = "levelup2",
     whileDead = true,

@@ -7,7 +7,7 @@ local util = ns:GetModule("util")
 local lastTick
 local partyStack = {} -- { name = { name=..., joined=..., lastSeenAt=... }}
 
-local GRACE_PERIOD = 1
+local GRACE_PERIOD = 3 * 60
 
 local function OnCharacterJoined(name, data)
     -- print("Character " .. name .. " (genderId: " .. data.genderId .. ", classId: " .. data.classId ..", raceId: " .. data.raceId .. ") joined party at " .. data.joined)
