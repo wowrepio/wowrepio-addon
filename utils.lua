@@ -16,6 +16,13 @@ end
 local util = ns:AddModule("util")
 local realms = ns.REALMS;
 
+function util:GenderLookup(unitName)
+    local g = UnitSex(unitName)
+    local sexToIdLookupTable = {3, 0, 1}
+    
+    return sexToIdLookupTable[g]
+end
+
 function util:WowrepioLink(region, realm, name)
     assert(region and realm and name, "util:WowrepioLink needs region, realm and name to be provided")
 
@@ -37,6 +44,8 @@ function util:GetCurrentRegion()
 end
 
 function util:GetRealmSlug(realm)
+    assert(realm, "util:GetRealmSlug requires a realm to be passed")
+    
     local realmSlug = realms[realm] or realms[realm:gsub("%s+", "")]
     return realmSlug or realm
 end

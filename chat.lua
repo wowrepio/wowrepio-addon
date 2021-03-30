@@ -17,10 +17,8 @@ local function OnDungeonFinished()
         chatChannel = "party"
     end
 
-    local name, _ = UnitName("player")
-
     print("[wowrep.io] If you would like to disable auto pitching, change it in settings using /wowrepio (chat channel selected: " .. chatChannel .. ")")
-    SendChatMessage("[wowrep.io] Thanks for the run! Please rate me at " .. util:WowrepioLink(util:GetCurrentRegion(), util:GetRealmSlug(GetRealmName()), name), chatChannel)
+    SendChatMessage("[wowrep.io] Thanks for the run! Please review me with wowrep.io!", chatChannel)
 end
 
 function chat:OnReady()
