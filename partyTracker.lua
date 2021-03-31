@@ -86,7 +86,8 @@ function partyTracker:GetData()
 
     local d = {}
     for k, v in pairs(partyStack) do
-        if lastTick - v.joined >= GRACE_PERIOD then
+
+        if lastTick - v.joined >= GRACE_PERIOD and lastTick - v.lastSeenAt <= GRACE_PERIOD then
             d[k] = v
         end
     end
