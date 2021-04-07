@@ -7,6 +7,7 @@
 ## SavedVariablesPerCharacter: wowrepioConfig
 
 libs/LibStub/LibStub.lua
+libs/LibDropDownExtension-1.0/LibDropDownExtension-1.0.lua
 libs/CallbackHandler-1.0/CallbackHandler-1.0.lua
 libs/LibDataBroker-1.1/LibDataBroker-1.1.lua
 libs/LibDBIcon-1.0/LibDBIcon-1.0.lua
@@ -23,6 +24,7 @@ channel.lua
 # Load addon
 hash.lua
 utils.lua
+dropdown.lua
 db.lua
 render.lua
 tooltips/game.lua
