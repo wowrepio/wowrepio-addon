@@ -29,6 +29,10 @@ local function lfgTooltip_GroupEntry(tooltip, resultID)
     local entry = C_LFGList.GetSearchResultInfo(resultID)
     local name, realm = util:GetNameRealm(entry.leaderName)
 
+    if not realm then 
+        return
+    end
+
     render:Score(tooltip, db:GetScore(ns.REGIONS[GetCurrentRegion()], util:GetRealmSlug(realm), name))
 end
 
