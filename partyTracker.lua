@@ -4,7 +4,7 @@ local partyTracker = ns:AddModule("partyTracker")
 local channel = ns:GetModule("channel")
 local util = ns:GetModule("util")
 
-local lastTick
+local lastTick = GetServerTime()
 local partyStack = {} -- { name = { name=..., joined=..., lastSeenAt=... }}
 
 local GRACE_PERIOD = 3 * 60
@@ -86,7 +86,6 @@ function partyTracker:GetData()
 
     local d = {}
     for k, v in pairs(partyStack) do
-
         if lastTick - v.joined >= GRACE_PERIOD and lastTick - v.lastSeenAt <= GRACE_PERIOD then
             d[k] = v
         end
