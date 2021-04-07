@@ -18,7 +18,7 @@ StaticPopupDialogs[POPUP_NAME] = {
 }
 
 local function showDialog()
-     StaticPopup_Show(POPUP_NAME)
+    StaticPopup_Show(POPUP_NAME)
 end     
 
 function popup:OnReady()
