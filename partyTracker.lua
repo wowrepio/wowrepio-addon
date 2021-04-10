@@ -97,6 +97,7 @@ end
 function partyTracker:OnReady()
     channel:RegisterEvent("GROUP_ROSTER_UPDATE", updateParty)
     channel:RegisterEvent("WOWREPIO_READY", updateParty)
+    channel:RegisterEvent("PLAYER_ENTERING_WORLD", updateParty)
 
     channel:RegisterEvent("WOWREPIO_PARTYSTACK_CHARACTER_LEFT", OnCharacterLeft)
     channel:RegisterEvent("WOWREPIO_PARTYSTACK_CHARACTER_JOINED", OnCharacterJoined)
