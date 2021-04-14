@@ -5,6 +5,7 @@ ns.DATABASE = {}
 -- HERE ARE DRAGONS --
 ns.DATABASE[756953429] = { average = 3.85, factors = { skill = 3.85, teamplay = 3.85, communication = 3.85 } }
 ns.DATABASE[126791284] = { average = 3.54, factors = { skill = 3.55, teamplay = 3.55, communication = 3.55 } }
+ns.DATABASE[249408852] = { average = 3.75, factors = { skill = 3.75, teamplay = 3.75, communication = 3.75 } }
 ns.DATABASE[305348873] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[844724352] = { average = 3.54, factors = { skill = 3.55, teamplay = 3.55, communication = 3.55 } }
 ns.DATABASE[145603870] = { average = 3.69, factors = { skill = 3.58, teamplay = 3.75, communication = 3.75 } }
@@ -75,8 +76,8 @@ ns.DATABASE[156544476] = { average = 3.64, factors = { skill = 3.64, teamplay = 
 ns.DATABASE[263697029] = { average = 3.58, factors = { skill = 3.58, teamplay = 3.58, communication = 3.58 } }
 ns.DATABASE[771441514] = { average = 3.75, factors = { skill = 3.75, teamplay = 3.75, communication = 3.75 } }
 ns.DATABASE[540415952] = { average = 3.46, factors = { skill = 3.45, teamplay = 3.45, communication = 3.45 } }
-ns.DATABASE[931211207] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[838725544] = { average = 3.85, factors = { skill = 3.85, teamplay = 3.85, communication = 3.85 } }
+ns.DATABASE[931211207] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[322633290] = { average = 3.75, factors = { skill = 3.75, teamplay = 3.75, communication = 3.75 } }
 ns.DATABASE[975512401] = { average = 3.69, factors = { skill = 3.75, teamplay = 3.67, communication = 3.67 } }
 ns.DATABASE[68984302] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
