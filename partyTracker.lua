@@ -95,10 +95,12 @@ function partyTracker:GetData()
 end
 
 function partyTracker:OnReady()
-    channel:RegisterEvent("GROUP_ROSTER_UPDATE", updateParty)
-    channel:RegisterEvent("WOWREPIO_READY", updateParty)
-    channel:RegisterEvent("PLAYER_ENTERING_WORLD", updateParty)
+    local updateEvents = {"GROUP_ROSTER_UPDATE", "WOWREPIO_READY", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED"}
 
-    channel:RegisterEvent("WOWREPIO_PARTYSTACK_CHARACTER_LEFT", OnCharacterLeft)
-    channel:RegisterEvent("WOWREPIO_PARTYSTACK_CHARACTER_JOINED", OnCharacterJoined)
+    for _, eventName in pairs(updateEvents) do
+        channel:RegisterEvent(eventName, updateParty)
+    end
+
+    -- channel:RegisterEvent("WOWREPIO_PARTYSTACK_CHARACTER_LEFT", OnCharacterLeft)
+    -- channel:RegisterEvent("WOWREPIO_PARTYSTACK_CHARACTER_JOINED", OnCharacterJoined)
 end
