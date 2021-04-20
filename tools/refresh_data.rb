@@ -49,10 +49,15 @@ if out.include?("nothing to commit")
   return
 end
 
+timestamp = Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')
+toc = File.open("../wowrepio.toc").read
+
+toc.gsub(/## Version: (\d)+\+(\d){4}/m, "## Version: #{timestamp}")
+
 system("git add .")
 system("git commit -m'Update db.lua'")
 if system("git push origin master")
-  system("git tag #{Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')}")
+  system("git tag #{timestamp}")
   system("git push --tags")
 end
 
