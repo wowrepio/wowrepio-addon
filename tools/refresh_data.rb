@@ -50,7 +50,7 @@ if out.include?("nothing to commit")
 end
 
 timestamp = Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')
-toc = File.open("../wowrepio.toc").read
+toc = File.open("wowrepio.toc").read
 
 toc.gsub(/## Version: (\d)+\+(\d){4}/m, "## Version: #{timestamp}")
 
