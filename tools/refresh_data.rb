@@ -50,9 +50,10 @@ if out.include?("nothing to commit")
 end
 
 timestamp = Time.now.to_s.gsub(' ','').gsub('-', '').gsub(':', '')
-toc = File.open("wowrepio.toc").read
 
-toc.gsub(/## Version: (\d)+\+(\d){4}/m, "## Version: #{timestamp}")
+toc = File.read("wowrepio.toc")
+new_toc = toc.gsub(/## Version: (\d)+\+(\d){4}/m, "## Version: #{timestamp}")
+File.open("wowrepio.toc", "w"){ |file| file.puts new_toc }
 
 system("git add .")
 system("git commit -m'Update db.lua'")
