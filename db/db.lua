@@ -879,7 +879,7 @@ ns.DATABASE[444026607] = { average = 3.75, factors = { skill = 3.75, teamplay = 
 ns.DATABASE[367446519] = { average = 3.69, factors = { skill = 3.69, teamplay = 3.69, communication = 3.69 } }
 ns.DATABASE[322209563] = { average = 3.27, factors = { skill = 3.27, teamplay = 3.27, communication = 3.27 } }
 ns.DATABASE[911587531] = { average = 3.27, factors = { skill = 3.27, teamplay = 3.27, communication = 3.27 } }
-ns.DATABASE[720290131] = { average = 3.33, factors = { skill = 3.27, teamplay = 3.36, communication = 3.36 } }
+ns.DATABASE[720290131] = { average = 3.47, factors = { skill = 3.42, teamplay = 3.50, communication = 3.50 } }
 ns.DATABASE[930063692] = { average = 3.36, factors = { skill = 3.36, teamplay = 3.27, communication = 3.45 } }
 ns.DATABASE[908079974] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[964227148] = { average = 3.75, factors = { skill = 3.75, teamplay = 3.75, communication = 3.75 } }
@@ -1031,3 +1031,9 @@ ns.DATABASE[401745640] = { average = 3.67, factors = { skill = 3.67, teamplay = 
 ns.DATABASE[527815659] = { average = 3.67, factors = { skill = 3.67, teamplay = 3.67, communication = 3.67 } }
 ns.DATABASE[358195100] = { average = 3.58, factors = { skill = 3.58, teamplay = 3.58, communication = 3.58 } }
 ns.DATABASE[353031007] = { average = 3.75, factors = { skill = 3.75, teamplay = 3.75, communication = 3.75 } }
+ns.DATABASE[903460074] = { average = 3.33, factors = { skill = 3.25, teamplay = 3.42, communication = 3.33 } }
+ns.DATABASE[732814717] = { average = 3.39, factors = { skill = 3.33, teamplay = 3.42, communication = 3.42 } }
+ns.DATABASE[449787769] = { average = 3.47, factors = { skill = 3.58, teamplay = 3.50, communication = 3.33 } }
+ns.DATABASE[933142608] = { average = 3.62, factors = { skill = 3.46, teamplay = 3.62, communication = 3.77 } }
+ns.DATABASE[520894967] = { average = 3.77, factors = { skill = 3.77, teamplay = 3.77, communication = 3.77 } }
+ns.DATABASE[199720062] = { average = 3.26, factors = { skill = 3.15, teamplay = 3.15, communication = 3.46 } }
