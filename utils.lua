@@ -1,7 +1,6 @@
 local _, ns = ...
 local type = type
 local table_insert = table.insert
-local table_getn = table.getn
 local string_find = string.find
 local string_sub = string.sub
 local string_upper = string.upper
@@ -32,6 +31,7 @@ local BNGetFriendIndex = BNGetFriendIndex
 local NORMAL_FONT_COLOR_CODE = NORMAL_FONT_COLOR_CODE
 local BNET_CLIENT_WOW = BNET_CLIENT_WOW
 local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
+local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
 
 function string:wowrepio_Split(delimiter)
     local result = { }
@@ -83,31 +83,38 @@ function util:GetRealmSlug(realm)
     return realmSlug or realm
 end
 
-local unitIdentifiers = {"mouseover", "player", "target", "focus", "pet", "vehicle"}
+local unitIdentifiers = {
+    ["mouseover"] = true,
+    ["player"] = true,
+    ["target"] = true,
+    ["focus"] = true,
+    ["pet"] = true,
+    ["vehicle"] = true,
+}
 
 do
     for i=1,40 do
-        table_insert(unitIdentifiers, "raid" .. i)
-        table_insert(unitIdentifiers, "raidpet" .. i)
-        table_insert(unitIdentifiers, "nameplate" .. i)
+        unitIdentifiers["raid" .. i] = true
+        unitIdentifiers["raidpet" .. i] = true
+        unitIdentifiers["nameplate" .. i] = true
     end
 
     for i=1,4 do
-        table_insert(unitIdentifiers, "party" .. i)
-        table_insert(unitIdentifiers, "partypet" .. i)
+        unitIdentifiers["party" .. i] = true
+        unitIdentifiers["partypet" .. i] = true
     end
 
     for i=1,5 do
-        table_insert(unitIdentifiers, "arena" .. i)
-        table_insert(unitIdentifiers, "arenapet" .. i)
+        unitIdentifiers["arena" .. i] = true
+        unitIdentifiers["arenapet" .. i] = true
     end
 
-    for i = 1, MAX_BOSS_FRAMES do
-        table_insert(unitIdentifiers, "boss" .. i)
+    for i=1, MAX_BOSS_FRAMES do
+        unitIdentifiers["boss" .. i] = true
     end
 
-    for k=1,table_getn(unitIdentifiers) do
-        table_insert(unitIdentifiers, k .. "target")
+    for k,_ in pairs(unitIdentifiers) do
+        unitIdentifiers[k .. "target"] = true
     end
 end
 
