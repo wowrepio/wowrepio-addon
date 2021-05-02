@@ -1,15 +1,48 @@
 local _, ns = ...
+local type = type
+local table_insert = table.insert
+local table_getn = table.getn
+local string_find = string.find
+local string_sub = string.sub
+local string_upper = string.upper
+local string_format = string.format
+local string_len = string.len
+local assert = assert
+local pcall = pcall
+local tonumber = tonumber
+local tostring = tostring
+local pairs = pairs
+local math_floor = math.floor
+-- global (api) functions defined by wow
+local strsplit = strsplit
+local C_BattleNet = C_BattleNet
+local UnitIsPlayer = UnitIsPlayer
+local UnitExists = UnitExists
+local abs = abs
+local ExtractLinkData = ExtractLinkData
+local UnitSex = UnitSex
+local format = format
+local GetNumGroupMembers = GetNumGroupMembers
+local GetCurrentRegion = GetCurrentRegion
+local GetNormalizedRealmName = GetNormalizedRealmName
+local LinkUtil = LinkUtil
+local UnitName = UnitName
+local BNGetFriendIndex = BNGetFriendIndex
+-- global constants defined by wow
+local NORMAL_FONT_COLOR_CODE = NORMAL_FONT_COLOR_CODE
+local BNET_CLIENT_WOW = BNET_CLIENT_WOW
+local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
 
 function string:wowrepio_Split(delimiter)
     local result = { }
     local from  = 1
-    local delim_from, delim_to = string.find( self, delimiter, from  )
+    local delim_from, delim_to = string_find( self, delimiter, from  )
     while delim_from do
-        table.insert( result, string.sub( self, from , delim_from-1 ) )
+        table_insert( result, string_sub( self, from , delim_from-1 ) )
         from  = delim_to + 1
-        delim_from, delim_to = string.find( self, delimiter, from  )
+        delim_from, delim_to = string_find( self, delimiter, from  )
     end
-    table.insert( result, string.sub( self, from  ) )
+    table_insert( result, string_sub( self, from  ) )
     return result
 end
 
@@ -54,27 +87,27 @@ local unitIdentifiers = {"mouseover", "player", "target", "focus", "pet", "vehic
 
 do
     for i=1,40 do
-        table.insert(unitIdentifiers, "raid" .. i)
-        table.insert(unitIdentifiers, "raidpet" .. i)
-        table.insert(unitIdentifiers, "nameplate" .. i)
+        table_insert(unitIdentifiers, "raid" .. i)
+        table_insert(unitIdentifiers, "raidpet" .. i)
+        table_insert(unitIdentifiers, "nameplate" .. i)
     end
 
     for i=1,4 do
-        table.insert(unitIdentifiers, "party" .. i)
-        table.insert(unitIdentifiers, "partypet" .. i)
+        table_insert(unitIdentifiers, "party" .. i)
+        table_insert(unitIdentifiers, "partypet" .. i)
     end
 
     for i=1,5 do
-        table.insert(unitIdentifiers, "arena" .. i)
-        table.insert(unitIdentifiers, "arenapet" .. i)
+        table_insert(unitIdentifiers, "arena" .. i)
+        table_insert(unitIdentifiers, "arenapet" .. i)
     end
 
     for i = 1, MAX_BOSS_FRAMES do
-        table.insert(unitIdentifiers, "boss" .. i)
+        table_insert(unitIdentifiers, "boss" .. i)
     end
 
-    for k=1,table.getn(unitIdentifiers) do
-        table.insert(unitIdentifiers, k .. "target")
+    for k=1,table_getn(unitIdentifiers) do
+        table_insert(unitIdentifiers, k .. "target")
     end
 end
 
@@ -102,7 +135,7 @@ function util:GetNameRealm(arg1, arg2)
     end
     if type(arg1) == "string" then
         if arg1:find("-", nil, true) then
-            nameTable = arg1:wowrepio_Split("-")
+            local nameTable = arg1:wowrepio_Split("-")
             name = nameTable[1]
             realm = nameTable[2]
         else
@@ -198,19 +231,19 @@ local function colorShade(hexColor, perc)
         b = 0
     end
 
-    local rr = string.format("%x", math.floor(r))
-    local gg = string.format("%x", math.floor(g))
-    local bb = string.format("%x", math.floor(b))
+    local rr = string_format("%x", math_floor(r))
+    local gg = string_format("%x", math_floor(g))
+    local bb = string_format("%x", math_floor(b))
 
-    if string.len(rr) == 1 then
+    if string_len(rr) == 1 then
         rr = "0" .. rr
     end
 
-    if string.len(gg) == 1 then
+    if string_len(gg) == 1 then
         gg = "0" .. gg
     end
 
-    if string.len(bb) == 1 then
+    if string_len(bb) == 1 then
         bb = "0" .. bb
     end
 
@@ -218,7 +251,7 @@ local function colorShade(hexColor, perc)
 end
 
 function util:GetNameRealmFromPlayerLink(playerLink)
-    local linkString, linkText = LinkUtil.SplitLink(playerLink)
+    local linkString = LinkUtil.SplitLink(playerLink)
     local linkType, linkData = ExtractLinkData(linkString)
     if linkType == "player" then
         return util:GetNameRealm(linkData)
@@ -295,7 +328,7 @@ function util:wowrepioString(offset, score, beLong)
                 text = text.." "
             end
 
-            text = text .. NORMAL_FONT_COLOR_CODE .. string.upper(string.sub(k, 1,1)) .. string.sub(k, 2, -1) .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
+            text = text .. NORMAL_FONT_COLOR_CODE .. string_upper(string_sub(k, 1,1)) .. string_sub(k, 2, -1) .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
         end
     end
 
