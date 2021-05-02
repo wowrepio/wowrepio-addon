@@ -118,51 +118,54 @@ do
     end
 end
 
--- Can be called with isUnit("Marahin"), IsUnit("party1"))
-function util:IsUnit(identifier, isPlayer)
-    if not isPlayer and type(identifier) == "string" and identifier:find("-", nil, true) then
-        isPlayer = true
+-- Can be called with isUnit("raid14"), IsUnit("party1"))
+function util:IsUnit(identifier)
+    if identifier:find("-", nil, true) then
+        return false, false
     end
 
-    local isUnit = false
-    if not isPlayer then
-        isUnit = type(identifier) == "string" and unitIdentifiers[identifier]
+    -- if it exists in unitIdentifiers, it's a valid unit name (like party1 or raid20)
+    if not unitIdentifiers[identifier] then
+        return false, false
     end
 
-    return isUnit, isUnit and UnitExists(identifier), isUnit and UnitIsPlayer(identifier)
+    return UnitExists(identifier), UnitIsPlayer(identifier)
 end
 
-function util:GetNameRealm(arg1, arg2)
-    local name, realm
-    local _, unitExists, unitIsPlayer = util:IsUnit(arg1, arg2)
+function util:GetNameRealm(characterOrUnitName, fallBackRealmName)
+    if type(characterOrUnitName) ~= "string" then
+        return
+    end
+
+    local characterName, characterRealm
+    local unitExists, unitIsPlayer = util:IsUnit(characterOrUnitName)
+    -- examples when arg1 is something like raid14 or party2
     if unitExists then
-        local unit = arg1
         if unitIsPlayer then
-            name, realm = UnitName(unit)
-            realm = realm and realm ~= "" and realm or GetNormalizedRealmName()
+            characterName, characterRealm = UnitName(characterOrUnitName)
+            characterRealm = characterRealm ~= "" and characterRealm or GetNormalizedRealmName()
         end
 
-        return name, realm, unit
+        return characterName, characterRealm
     end
 
-    if type(arg1) == "string" then
-        if arg1:find("-", nil, true) then
-            local nameTable = arg1:wowrepio_Split("-")
-            name = nameTable[1]
-            realm = nameTable[2]
+    if characterOrUnitName:find("-", nil, true) then
+        local nameTable = characterOrUnitName:wowrepio_Split("-")
+        characterName = nameTable[1]
+        characterRealm = nameTable[2]
+    else
+        characterName = characterOrUnitName -- assume this is the name
+    end
+
+    if not characterRealm or characterRealm == "" then
+        if type(fallBackRealmName) == "string" and fallBackRealmName ~= "" then
+            characterRealm = fallBackRealmName
         else
-            name = arg1 -- assume this is the name
-        end
-        if not realm or realm == "" then
-            if type(arg2) == "string" and arg2 ~= "" then
-                realm = arg2
-            else
-                realm = GetNormalizedRealmName() -- assume they are on our realm
-            end
+            characterRealm = GetNormalizedRealmName() -- assume they are on our realm
         end
     end
 
-    return name, realm, nil
+    return characterName, characterRealm
 end
 
 function util:ExecuteWidgetHandler(object, handler, ...)
@@ -274,7 +277,7 @@ function util:GetNameRealmFromPlayerLink(playerLink)
         end
         if bnetIDAccount then
             local fullName, _  = util:GetNameRealmForBnetFriend(bnetIDAccount)
-            local name, realm, _ = util:GetNameRealm(fullName)
+            local name, realm = util:GetNameRealm(fullName)
             return name, realm
         end
     end

@@ -35,10 +35,11 @@ local function updateParty()
     
     -- Ensure existence of partyStack entity
     for i=1, GetNumGroupMembers() do
-        local fullName, realm, unitExists = util:GetNameRealm(prefix .. i)
-        -- print("fullName: " .. fullName)
-        if fullName ~= UNKNOWNOBJECT and realm and fullName ~= prefix .. i and unitExists then -- If the user identifier cannot be fetched then we just omit (usually it happens when its us in the party)
-            local entryKey = util:GetCurrentRegion() .. "/" .. util:GetRealmSlug(realm) .. "/" .. fullName
+        local unitName = prefix .. i
+        local characterName, characterRealm = util:GetNameRealm(unitName)
+
+        if characterName and characterName ~= UNKNOWNOBJECT and characterName ~= unitName and characterRealm then -- If the user identifier cannot be fetched then we just omit (usually it happens when its us in the party)
+            local entryKey = util:GetCurrentRegion() .. "/" .. util:GetRealmSlug(characterRealm) .. "/" .. characterName
 
             if partyStack[entryKey] ~= nil then -- Party member exists
                 -- print("Member existed: " .. entryKey)
@@ -53,9 +54,9 @@ local function updateParty()
             else
                 -- print("Character new: " .. entryKey)
 
-                local _, _, raceId = UnitRace(fullName)
-                local _, _, classId = UnitClass(fullName)
-                local genderId = util:GenderLookup(fullName)
+                local _, _, raceId = UnitRace(characterName)
+                local _, _, classId = UnitClass(characterName)
+                local genderId = util:GenderLookup(characterName)
 
                 if raceId and classId and genderId then
                     partyStack[entryKey] = {

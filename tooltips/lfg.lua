@@ -49,7 +49,7 @@ function lfgTooltip_OnEnter(self)
     elseif self.memberIdx then
         local fullNameAvailable, fullName = lfgTooltip:GetFullName(self, self:GetParent().applicantID, self.memberIdx)
         if fullNameAvailable then
-            local name, realm, _ = util:GetNameRealm(fullName)
+            local name, realm = util:GetNameRealm(fullName)
             render:Score(GameTooltip, db:GetScore(util:GetCurrentRegion(), util:GetRealmSlug(realm, true), name))
         end
     end
