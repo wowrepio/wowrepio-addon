@@ -122,10 +122,10 @@ function util:IsUnit(identifier, isPlayer)
 end
 
 function util:GetNameRealm(arg1, arg2)
-    local unit, name, realm
+    local name, realm
     local _, unitExists, unitIsPlayer = util:IsUnit(arg1, arg2)
     if unitExists then
-        unit = arg1
+        local unit = arg1
         if unitIsPlayer then
             name, realm = UnitName(unit)
             realm = realm and realm ~= "" and realm or GetNormalizedRealmName()
@@ -133,6 +133,7 @@ function util:GetNameRealm(arg1, arg2)
 
         return name, realm, unit
     end
+
     if type(arg1) == "string" then
         if arg1:find("-", nil, true) then
             local nameTable = arg1:wowrepio_Split("-")
@@ -150,7 +151,7 @@ function util:GetNameRealm(arg1, arg2)
         end
     end
 
-    return name, realm, unit
+    return name, realm, nil
 end
 
 function util:ExecuteWidgetHandler(object, handler, ...)
