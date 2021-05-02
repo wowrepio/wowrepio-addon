@@ -123,7 +123,11 @@ function util:IsUnit(identifier, isPlayer)
     if not isPlayer and type(identifier) == "string" and identifier:find("-", nil, true) then
         isPlayer = true
     end
-    local isUnit = not isPlayer or type(identifier) == "string" and unitIdentifiers[identifier]
+
+    local isUnit = false
+    if not isPlayer then
+        isUnit = type(identifier) == "string" and unitIdentifiers[identifier]
+    end
 
     return isUnit, isUnit and UnitExists(identifier), isUnit and UnitIsPlayer(identifier)
 end

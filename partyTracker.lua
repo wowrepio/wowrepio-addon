@@ -1,4 +1,10 @@
 local _, ns = ...
+local UNKNOWNOBJECT = UNKNOWNOBJECT
+local GetServerTime = GetServerTime
+local GetNumGroupMembers = GetNumGroupMembers
+local UnitRace = UnitRace
+local UnitClass = UnitClass
+local IsInRaid = IsInRaid
 
 local partyTracker = ns:AddModule("partyTracker")
 local channel = ns:GetModule("channel")
@@ -18,7 +24,6 @@ local function OnCharacterLeft(name, data)
 end
 
 local function updateParty()
-    local partyUpdated = false
     local prefix
     lastTick = GetServerTime()
 
@@ -32,7 +37,7 @@ local function updateParty()
     for i=1, GetNumGroupMembers() do
         local fullName, realm, unitExists = util:GetNameRealm(prefix .. i)
         -- print("fullName: " .. fullName)
-        if fullName ~= "Unknown" and fullName ~= prefix .. i and unitExists then -- If the user identifier cannot be fetched then we just omit (usually it happens when its us in the party)
+        if fullName ~= UNKNOWNOBJECT and realm and fullName ~= prefix .. i and unitExists then -- If the user identifier cannot be fetched then we just omit (usually it happens when its us in the party)
             local entryKey = util:GetCurrentRegion() .. "/" .. util:GetRealmSlug(realm) .. "/" .. fullName
 
             if partyStack[entryKey] ~= nil then -- Party member exists
@@ -55,7 +60,7 @@ local function updateParty()
                 if raceId and classId and genderId then
                     partyStack[entryKey] = {
                         joined=lastTick, lastSeenAt=lastTick, 
-                        emittedLeftEvent=false, emitedJoinEvent=false,
+                        emittedLeftEvent=false, emittedJoinEvent=false,
                         raceId=raceId, classId=classId, genderId=genderId,
                     }
                 end
