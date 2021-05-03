@@ -856,6 +856,7 @@ ns.DATABASE[663379792] = { average = 3.11, factors = { skill = 3.08, teamplay = 
 ns.DATABASE[766759412] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[280416697] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[785778616] = { average = 3.46, factors = { skill = 3.45, teamplay = 3.45, communication = 3.45 } }
+ns.DATABASE[735160519] = { average = 3.61, factors = { skill = 3.64, teamplay = 3.64, communication = 3.55 } }
 ns.DATABASE[325579137] = { average = 3.39, factors = { skill = 3.36, teamplay = 3.36, communication = 3.45 } }
 ns.DATABASE[115187145] = { average = 3.36, factors = { skill = 3.27, teamplay = 3.55, communication = 3.27 } }
 ns.DATABASE[513856251] = { average = 3.27, factors = { skill = 3.27, teamplay = 3.27, communication = 3.27 } }
@@ -1135,3 +1136,4 @@ ns.DATABASE[710729159] = { average = 3.54, factors = { skill = 3.45, teamplay = 
 ns.DATABASE[880100680] = { average = 3.58, factors = { skill = 3.64, teamplay = 3.55, communication = 3.55 } }
 ns.DATABASE[305533835] = { average = 3.17, factors = { skill = 3.17, teamplay = 3.17, communication = 3.17 } }
 ns.DATABASE[315554630] = { average = 3.85, factors = { skill = 3.85, teamplay = 3.85, communication = 3.85 } }
+ns.DATABASE[498803639] = { average = 3.48, factors = { skill = 3.55, teamplay = 3.45, communication = 3.45 } }
