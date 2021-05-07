@@ -302,7 +302,7 @@ function util:getColorFor(value)
     return "|c00" .. colorShade(colorBase, perc)
 end
 
-function util:GetNameRealmForBnetFriend(bnetIDAccount)
+function util:GetNameRealmForBNetFriend(bnetIDAccount)
     local index = BNGetFriendIndex(bnetIDAccount)
     if not index then
         return
