@@ -3,7 +3,7 @@
 ## Author: Marahin
 ## X-Curse-Project-ID: 456155
 ## X-WoWI-ID: 25899
-## Version: 20210507200044+0000
+## Version: 20210508000057+0000
 ## SavedVariablesPerCharacter: wowrepioConfig
 
 libs/LibStub/LibStub.lua
