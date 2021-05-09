@@ -23,6 +23,7 @@ channel.lua
 
 # Load addon
 hash.lua
+vodka62.lua
 utils.lua
 dropdown.lua
 db.lua

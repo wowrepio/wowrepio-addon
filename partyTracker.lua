@@ -32,9 +32,9 @@ local function updateParty()
     else
         prefix = "party"
     end
-    
+
     -- Ensure existence of partyStack entity
-    for i=1, GetNumGroupMembers() do
+    for i = 1, GetNumGroupMembers() do
         local unitName = prefix .. i
         local characterName, characterRealm = util:GetNameRealm(unitName)
 
@@ -60,9 +60,13 @@ local function updateParty()
 
                 if raceId and classId and genderId then
                     partyStack[entryKey] = {
-                        joined=lastTick, lastSeenAt=lastTick, 
-                        emittedLeftEvent=false, emittedJoinEvent=false,
-                        raceId=raceId, classId=classId, genderId=genderId,
+                        joined = lastTick,
+                        lastSeenAt = lastTick,
+                        emittedLeftEvent = false,
+                        emittedJoinEvent = false,
+                        raceId = raceId,
+                        classId = classId,
+                        genderId = genderId
                     }
                 end
             end
@@ -76,15 +80,15 @@ local function updateParty()
             partyStack[name].emittedLeftEvent = true
         end
 
-        if (lastTick - 1) <= data.joined and (lastTick+1) >= data.joined and not data.emittedJoinEvent then -- Character has just joined
+        if (lastTick - 1) <= data.joined and (lastTick + 1) >= data.joined and not data.emittedJoinEvent then -- Character has just joined
             channel:SendEvent("WOWREPIO_PARTYSTACK_CHARACTER_JOINED", name, data)
             partyStack[name].emittedJoinEvent = true
-        end 
+        end
 
         if lastTick - data.lastSeenAt > GRACE_PERIOD then -- The player was away for more than grace period 
             partyStack[name] = nil
         end
-    end        
+    end
 end
 
 function partyTracker:GetData()
@@ -101,7 +105,8 @@ function partyTracker:GetData()
 end
 
 function partyTracker:OnReady()
-    local updateEvents = {"GROUP_ROSTER_UPDATE", "WOWREPIO_READY", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED", "PLAYER_REGEN_ENABLED"}
+    local updateEvents = {"GROUP_ROSTER_UPDATE", "WOWREPIO_READY", "PLAYER_ENTERING_WORLD", "PLAYER_REGEN_DISABLED",
+                          "PLAYER_REGEN_ENABLED"}
 
     for _, eventName in pairs(updateEvents) do
         channel:RegisterEvent(eventName, updateParty)
