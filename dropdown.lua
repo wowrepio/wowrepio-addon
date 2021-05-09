@@ -37,7 +37,7 @@ local function HandleBnet(dd)
     local name, realm
     local fullName, _, _ = util:GetNameRealmForBNetFriend(dd.bnetIDAccount)
     if fullName then
-        name, realm, _ = util:GetNameRealm(fullName)
+        name, realm = util:GetNameRealm(fullName)
     end
 
     return name, realm
@@ -62,7 +62,7 @@ local function GetNameRealmForDropdown(dd)
 
     if UnitExists(dd.unit) then
         if UnitIsPlayer(dd.unit) then
-            name, realm, _  = util:GetNameRealm(dd.unit)
+            name, realm  = util:GetNameRealm(dd.unit)
         end
 
         return name, realm

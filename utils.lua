@@ -1,15 +1,48 @@
 local _, ns = ...
+local type = type
+local table_insert = table.insert
+local string_find = string.find
+local string_sub = string.sub
+local string_upper = string.upper
+local string_format = string.format
+local string_len = string.len
+local assert = assert
+local pcall = pcall
+local tonumber = tonumber
+local tostring = tostring
+local pairs = pairs
+local math_floor = math.floor
+-- global (api) functions defined by wow
+local strsplit = strsplit
+local C_BattleNet = C_BattleNet
+local UnitIsPlayer = UnitIsPlayer
+local UnitExists = UnitExists
+local abs = abs
+local ExtractLinkData = ExtractLinkData
+local UnitSex = UnitSex
+local format = format
+local GetNumGroupMembers = GetNumGroupMembers
+local GetCurrentRegion = GetCurrentRegion
+local GetNormalizedRealmName = GetNormalizedRealmName
+local LinkUtil = LinkUtil
+local UnitName = UnitName
+local BNGetFriendIndex = BNGetFriendIndex
+-- global constants defined by wow
+local NORMAL_FONT_COLOR_CODE = NORMAL_FONT_COLOR_CODE
+local BNET_CLIENT_WOW = BNET_CLIENT_WOW
+local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
+local MAX_BOSS_FRAMES = MAX_BOSS_FRAMES
 
 function string:wowrepio_Split(delimiter)
     local result = { }
     local from  = 1
-    local delim_from, delim_to = string.find( self, delimiter, from  )
+    local delim_from, delim_to = string_find( self, delimiter, from  )
     while delim_from do
-        table.insert( result, string.sub( self, from , delim_from-1 ) )
+        table_insert( result, string_sub( self, from , delim_from-1 ) )
         from  = delim_to + 1
-        delim_from, delim_to = string.find( self, delimiter, from  )
+        delim_from, delim_to = string_find( self, delimiter, from  )
     end
-    table.insert( result, string.sub( self, from  ) )
+    table_insert( result, string_sub( self, from  ) )
     return result
 end
 
@@ -50,74 +83,89 @@ function util:GetRealmSlug(realm)
     return realmSlug or realm
 end
 
-local unitIdentifiers = {"mouseover", "player", "target", "focus", "pet", "vehicle"}
+local unitIdentifiers = {
+    ["mouseover"] = true,
+    ["player"] = true,
+    ["target"] = true,
+    ["focus"] = true,
+    ["pet"] = true,
+    ["vehicle"] = true,
+}
 
 do
     for i=1,40 do
-        table.insert(unitIdentifiers, "raid" .. i)
-        table.insert(unitIdentifiers, "raidpet" .. i)
-        table.insert(unitIdentifiers, "nameplate" .. i)
+        unitIdentifiers["raid" .. i] = true
+        unitIdentifiers["raidpet" .. i] = true
+        unitIdentifiers["nameplate" .. i] = true
     end
 
     for i=1,4 do
-        table.insert(unitIdentifiers, "party" .. i)
-        table.insert(unitIdentifiers, "partypet" .. i)
+        unitIdentifiers["party" .. i] = true
+        unitIdentifiers["partypet" .. i] = true
     end
 
     for i=1,5 do
-        table.insert(unitIdentifiers, "arena" .. i)
-        table.insert(unitIdentifiers, "arenapet" .. i)
+        unitIdentifiers["arena" .. i] = true
+        unitIdentifiers["arenapet" .. i] = true
     end
 
-    for i = 1, MAX_BOSS_FRAMES do
-        table.insert(unitIdentifiers, "boss" .. i)
+    for i=1, MAX_BOSS_FRAMES do
+        unitIdentifiers["boss" .. i] = true
     end
 
-    for k=1,table.getn(unitIdentifiers) do
-        table.insert(unitIdentifiers, k .. "target")
+    for k,_ in pairs(unitIdentifiers) do
+        unitIdentifiers[k .. "target"] = true
     end
 end
 
--- Can be called with isUnit("Marahin"), IsUnit("party1"))
-function util:IsUnit(identifier, isPlayer)
-    if not isPlayer and type(identifier) == "string" and identifier:find("-", nil, true) then
-        isPlayer = true
+-- Can be called with isUnit("raid14"), IsUnit("party1"))
+function util:IsUnit(identifier)
+    if identifier:find("-", nil, true) then
+        return false, false
     end
-    local isUnit = not isPlayer or type(identifier) == "string" and unitIdentifiers[identifier]
 
-    return isUnit, isUnit and UnitExists(identifier), isUnit and UnitIsPlayer(identifier)
+    -- if it exists in unitIdentifiers, it's a valid unit name (like party1 or raid20)
+    if not unitIdentifiers[identifier] then
+        return false, false
+    end
+
+    return UnitExists(identifier), UnitIsPlayer(identifier)
 end
 
-function util:GetNameRealm(arg1, arg2)
-    local unit, name, realm
-    local _, unitExists, unitIsPlayer = util:IsUnit(arg1, arg2)
+function util:GetNameRealm(characterOrUnitName, fallBackRealmName)
+    if type(characterOrUnitName) ~= "string" then
+        return
+    end
+
+    local characterName, characterRealm
+    local unitExists, unitIsPlayer = util:IsUnit(characterOrUnitName)
+    -- examples when arg1 is something like raid14 or party2
     if unitExists then
-        unit = arg1
         if unitIsPlayer then
-            name, realm = UnitName(unit)
-            realm = realm and realm ~= "" and realm or GetNormalizedRealmName()
+            characterName, characterRealm = UnitName(characterOrUnitName)
+            characterRealm = characterRealm ~= "" and characterRealm or GetNormalizedRealmName()
         end
 
-        return name, realm, unit
+        return characterName, characterRealm
     end
-    if type(arg1) == "string" then
-        if arg1:find("-", nil, true) then
-            nameTable = arg1:wowrepio_Split("-")
-            name = nameTable[1]
-            realm = nameTable[2]
+
+    if characterOrUnitName:find("-", nil, true) then
+        local nameTable = characterOrUnitName:wowrepio_Split("-")
+        characterName = nameTable[1]
+        characterRealm = nameTable[2]
+    else
+        characterName = characterOrUnitName -- assume this is the name
+    end
+
+    if not characterRealm or characterRealm == "" then
+        if type(fallBackRealmName) == "string" and fallBackRealmName ~= "" then
+            characterRealm = fallBackRealmName
         else
-            name = arg1 -- assume this is the name
-        end
-        if not realm or realm == "" then
-            if type(arg2) == "string" and arg2 ~= "" then
-                realm = arg2
-            else
-                realm = GetNormalizedRealmName() -- assume they are on our realm
-            end
+            characterRealm = GetNormalizedRealmName() -- assume they are on our realm
         end
     end
 
-    return name, realm, unit
+    return characterName, characterRealm
 end
 
 function util:ExecuteWidgetHandler(object, handler, ...)
@@ -198,19 +246,19 @@ local function colorShade(hexColor, perc)
         b = 0
     end
 
-    local rr = string.format("%x", math.floor(r))
-    local gg = string.format("%x", math.floor(g))
-    local bb = string.format("%x", math.floor(b))
+    local rr = string_format("%x", math_floor(r))
+    local gg = string_format("%x", math_floor(g))
+    local bb = string_format("%x", math_floor(b))
 
-    if string.len(rr) == 1 then
+    if string_len(rr) == 1 then
         rr = "0" .. rr
     end
 
-    if string.len(gg) == 1 then
+    if string_len(gg) == 1 then
         gg = "0" .. gg
     end
 
-    if string.len(bb) == 1 then
+    if string_len(bb) == 1 then
         bb = "0" .. bb
     end
 
@@ -218,7 +266,7 @@ local function colorShade(hexColor, perc)
 end
 
 function util:GetNameRealmFromPlayerLink(playerLink)
-    local linkString, linkText = LinkUtil.SplitLink(playerLink)
+    local linkString = LinkUtil.SplitLink(playerLink)
     local linkType, linkData = ExtractLinkData(linkString)
     if linkType == "player" then
         return util:GetNameRealm(linkData)
@@ -229,7 +277,7 @@ function util:GetNameRealmFromPlayerLink(playerLink)
         end
         if bnetIDAccount then
             local fullName, _  = util:GetNameRealmForBnetFriend(bnetIDAccount)
-            local name, realm, _ = util:GetNameRealm(fullName)
+            local name, realm = util:GetNameRealm(fullName)
             return name, realm
         end
     end
@@ -254,7 +302,7 @@ function util:getColorFor(value)
     return "|c00" .. colorShade(colorBase, perc)
 end
 
-function util:GetNameRealmForBnetFriend(bnetIDAccount)
+function util:GetNameRealmForBNetFriend(bnetIDAccount)
     local index = BNGetFriendIndex(bnetIDAccount)
     if not index then
         return
@@ -295,7 +343,7 @@ function util:wowrepioString(offset, score, beLong)
                 text = text.." "
             end
 
-            text = text .. NORMAL_FONT_COLOR_CODE .. string.upper(string.sub(k, 1,1)) .. string.sub(k, 2, -1) .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
+            text = text .. NORMAL_FONT_COLOR_CODE .. string_upper(string_sub(k, 1,1)) .. string_sub(k, 2, -1) .. "|r" .. ": ".. util:getColorFor(v) .. v .. "|r" .. "|n"
         end
     end
 
