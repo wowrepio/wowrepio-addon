@@ -996,6 +996,7 @@ ns.DATABASE[295166417] = { average = 3.54, factors = { skill = 3.64, teamplay = 
 ns.DATABASE[305109279] = { average = 3.54, factors = { skill = 3.64, teamplay = 3.45, communication = 3.55 } }
 ns.DATABASE[65729867] = { average = 3.46, factors = { skill = 3.45, teamplay = 3.45, communication = 3.45 } }
 ns.DATABASE[925011362] = { average = 3.69, factors = { skill = 3.67, teamplay = 3.75, communication = 3.67 } }
+ns.DATABASE[712538883] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[61046780] = { average = 3.67, factors = { skill = 3.67, teamplay = 3.67, communication = 3.67 } }
 ns.DATABASE[867681012] = { average = 3.75, factors = { skill = 3.75, teamplay = 3.75, communication = 3.75 } }
 ns.DATABASE[906330318] = { average = 3.75, factors = { skill = 3.75, teamplay = 3.75, communication = 3.75 } }
@@ -1369,3 +1370,10 @@ ns.DATABASE[826186401] = { average = 3.42, factors = { skill = 3.45, teamplay = 
 ns.DATABASE[513366324] = { average = 3.61, factors = { skill = 3.64, teamplay = 3.64, communication = 3.55 } }
 ns.DATABASE[586962248] = { average = 3.27, factors = { skill = 3.27, teamplay = 3.27, communication = 3.27 } }
 ns.DATABASE[719321658] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
+ns.DATABASE[722883680] = { average = 3.39, factors = { skill = 3.36, teamplay = 3.45, communication = 3.36 } }
+ns.DATABASE[998168688] = { average = 3.46, factors = { skill = 3.45, teamplay = 3.45, communication = 3.45 } }
+ns.DATABASE[17351441] = { average = 3.46, factors = { skill = 3.45, teamplay = 3.45, communication = 3.45 } }
+ns.DATABASE[384423894] = { average = 3.46, factors = { skill = 3.45, teamplay = 3.45, communication = 3.45 } }
+ns.DATABASE[113649229] = { average = 3.58, factors = { skill = 3.58, teamplay = 3.58, communication = 3.58 } }
+ns.DATABASE[23695940] = { average = 3.56, factors = { skill = 3.50, teamplay = 3.58, communication = 3.58 } }
+ns.DATABASE[318164873] = { average = 3.56, factors = { skill = 3.50, teamplay = 3.58, communication = 3.58 } }
