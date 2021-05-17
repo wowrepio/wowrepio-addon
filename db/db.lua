@@ -1409,3 +1409,7 @@ ns.DATABASE[645001096] = { average = 3.64, factors = { skill = 3.64, teamplay = 
 ns.DATABASE[185940701] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[180137848] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
 ns.DATABASE[978235459] = { average = 3.42, factors = { skill = 3.45, teamplay = 3.45, communication = 3.36 } }
+ns.DATABASE[823024317] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
+ns.DATABASE[832464339] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
+ns.DATABASE[142175712] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
+ns.DATABASE[580336078] = { average = 3.64, factors = { skill = 3.64, teamplay = 3.64, communication = 3.64 } }
